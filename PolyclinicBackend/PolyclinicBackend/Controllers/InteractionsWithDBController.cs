@@ -20,7 +20,7 @@ namespace PolyclinicBackend.Controllers
             IActionResult res;
             try
             {
-                _visitorRepository.AddVisitor(id, firstName, lastName, fatherName, city, gender);
+                //_visitorRepository.AddVisitor(id, firstName, lastName, fatherName, city, gender);
                 res = Ok();
             }
             catch (Exception ex) { res = BadRequest(ex.Message); }

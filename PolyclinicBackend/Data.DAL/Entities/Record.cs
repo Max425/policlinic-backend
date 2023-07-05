@@ -10,9 +10,9 @@ namespace Data.DAL.Entities
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
-        public int CardId { get; set; }
-        public Card Card { get; set; }
-        public int SurveyId {get; set;} 
+        public int VisitorId { get; set; }
+        public Visitor Visitor { get; set; }
+        public int SurveyId { get; set; }
         public Survey Survey { get; set; }
     }
 }

@@ -10,7 +10,6 @@ namespace Data.DAL.Context
 {
     public class VisitorsContext : DbContext
     {
-        public DbSet<Card> Cards { get; set; }
         public DbSet<Record> Records { get; set; }
         public DbSet<Survey> Surveys { get; set; }
         public DbSet<Visitor> Visitors { get; set; }
