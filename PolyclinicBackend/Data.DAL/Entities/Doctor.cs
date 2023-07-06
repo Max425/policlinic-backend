@@ -1,11 +1,11 @@
 ﻿namespace Data.DAL.Entities;
 
-public class Record
+public class Doctor
 {
     public int Id { get; set; }
-    public DateTime Date { get; set; }
-    public int VisitorId { get; set; }
-    public Visitor Visitor { get; set; }
+    public string FullName { get; set; }
+    public int CabinetNumber { get; set; }
     public int SurveyId { get; set; }
     public Survey Survey { get; set; }
 }
+
