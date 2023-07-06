@@ -11,9 +11,9 @@ namespace Data.DAL.Repositories
 {
     public class VisitorRepository
     {
-        public VisitorsContext _db;
+        public PolyclinicContext _db;
 
-        public VisitorRepository(VisitorsContext db)
+        public VisitorRepository(PolyclinicContext db)
         {
             _db = db;
         }

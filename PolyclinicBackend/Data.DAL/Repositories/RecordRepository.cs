@@ -10,8 +10,8 @@ namespace Data.DAL.Repositories
 {
     public class RecordRepository
     {
-        VisitorsContext _db;
-        public RecordRepository(VisitorsContext visitorsContext)
+        PolyclinicContext _db;
+        public RecordRepository(PolyclinicContext visitorsContext)
         {
             _db = visitorsContext;
         }

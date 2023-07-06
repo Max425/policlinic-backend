@@ -12,9 +12,9 @@ namespace Data.DAL.Repositories
 {
     public class SurveyRepository
     {
-        private readonly VisitorsContext _db;
+        private readonly PolyclinicContext _db;
 
-        public SurveyRepository(VisitorsContext visitorsContext)
+        public SurveyRepository(PolyclinicContext visitorsContext)
         {
             _db = visitorsContext;
         }
