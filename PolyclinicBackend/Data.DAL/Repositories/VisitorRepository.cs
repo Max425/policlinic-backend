@@ -19,7 +19,7 @@ namespace Data.DAL.Repositories
         }
 
         public async Task AddVisitor(string firstName, string lastName, string fatherName, string city, string gender, 
-            DateTime birthDate, string nationality, int passportSeries, int passportNumber, DateTime dateIssue)
+            DateTime birthDate, string nationality, int passportSeries, string photoBase64, int passportNumber, DateTime dateIssue)
         {
             var p = _db.Visitors.Where(q => q.PassportSeries == passportSeries && q.PassportNumber == passportNumber).FirstOrDefault();
             if(p == null)
@@ -34,6 +34,7 @@ namespace Data.DAL.Repositories
                     BirthDate = birthDate,
                     Nationality = nationality,
                     PassportSeries = passportSeries,
+                    PhotoBase64 = photoBase64,
                     PassportNumber = passportNumber,
                     DateIssue = dateIssue
                 };
@@ -44,7 +45,7 @@ namespace Data.DAL.Repositories
         }
 
         public async Task EditVisitor(string firstName, string lastName, string fatherName, string city, string gender,
-            DateTime birthDate, string nationality, int passportSeries, int passportNumber, DateTime dateIssue)
+            DateTime birthDate, string nationality, int passportSeries, string photoBase64, int passportNumber, DateTime dateIssue)
         {
             var p = _db.Visitors.Where(q => q.PassportSeries == passportSeries && q.PassportNumber == passportNumber).FirstOrDefault();
             if(p != null)
@@ -57,6 +58,7 @@ namespace Data.DAL.Repositories
                 p.BirthDate = birthDate;
                 p.Nationality = nationality;
                 p.PassportNumber = passportNumber;
+                p.PhotoBase64 = photoBase64;
                 p.PassportSeries = passportSeries;
                 p.DateIssue = dateIssue;
                 await _db.SaveChangesAsync();

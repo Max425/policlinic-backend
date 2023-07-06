@@ -18,7 +18,7 @@ namespace Data.DAL.Entities
         public string Nationality { get; set; }
         public int PassportSeries { get; set; }
         public int PassportNumber { get; set; }
-        //public Photo Photo { get; set; }
+        public string PhotoBase64 { get; set; }
         public DateTime DateIssue { get; set; }
     }
 }

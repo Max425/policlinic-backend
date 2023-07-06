@@ -23,6 +23,7 @@ namespace Data.BLL.Converters.EntitiesToDTOs
                 Id = visitor.Id,
                 LastName = visitor.LastName,
                 Nationality = visitor.Nationality,
+                PhotoBase64 = visitor.PhotoBase64,
                 PassportNumber = visitor.PassportNumber,
                 PassportSeries = visitor.PassportSeries,
             };

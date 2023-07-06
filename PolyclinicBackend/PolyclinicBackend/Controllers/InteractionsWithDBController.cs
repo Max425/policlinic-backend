@@ -22,13 +22,13 @@ namespace PolyclinicBackend.Controllers
 
         [HttpGet("AddVisitor")]
         public async Task<IActionResult> AddVisitor(string firstName, string lastName, string fatherName, string city, string gender,
-            DateTime birthDate, string nationality, int passportSeries, int passportNumber, DateTime dateIssue)
+            DateTime birthDate, string nationality, int passportSeries, string photoBase64, int passportNumber, DateTime dateIssue)
         {
             IActionResult res;
             try
             {
                 await _visitorRepository.AddVisitor(firstName, lastName, fatherName, city, gender,
-            birthDate, nationality, passportSeries, passportNumber, dateIssue);
+            birthDate, nationality, passportSeries, photoBase64, passportNumber, dateIssue);
                 res = Ok();
             }
             catch (Exception ex) { res = BadRequest(ex.Message); }
@@ -63,13 +63,13 @@ namespace PolyclinicBackend.Controllers
 
         [HttpPatch("EditVisitor")]
         public async Task<IActionResult> EditVisitor(string firstName, string lastName, string fatherName, string city, string gender,
-            DateTime birthDate, string nationality, int passportSeries, int passportNumber, DateTime dateIssue)
+            DateTime birthDate, string nationality, int passportSeries, string photoBase64, int passportNumber, DateTime dateIssue)
         {
             IActionResult res;
             try
             {
                 await _visitorRepository.EditVisitor(firstName, lastName, fatherName, city, gender,
-                birthDate, nationality, passportSeries, passportNumber, dateIssue);
+                birthDate, nationality, passportSeries, photoBase64, passportNumber, dateIssue);
                 res = Ok();
             }
             catch (Exception ex) { res = BadRequest(ex.Message); }
