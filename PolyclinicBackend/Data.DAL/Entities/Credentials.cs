@@ -6,14 +6,11 @@ using System.Threading.Tasks;
 
 namespace Data.DAL.Entities
 {
-    public class Record
+    public class Credentials
     {
         public int Id { get; set; }
-        public DateTime Date { get; set; }
-        public int VisitorId { get; set; }
-        public Visitor Visitor { get; set; }
-        public int SurveyId { get; set; }
-        public Survey Survey { get; set; }
+        public string login { get; set; }
+        public string password { get; set; }
         public int OperatorId { get; set; }
         public Operator Operator { get; set; }
     }

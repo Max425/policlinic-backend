@@ -16,7 +16,7 @@ namespace Data.DAL.Repositories
             _db = visitorsContext;
         }
 
-        public async Task AddRecord(DateTime dateTime, int visitorId, int surveyId)
+        public async Task AddRecord(DateTime dateTime, int visitorId, int surveyId, int operatorId)
         {
             var p = _db.Records.Where(p => p.Date == dateTime && p.SurveyId != 0).FirstOrDefault();
             if (p == null)
@@ -25,14 +25,15 @@ namespace Data.DAL.Repositories
                 {
                     VisitorId = visitorId,
                     SurveyId = surveyId,
-                    Date = dateTime
+                    Date = dateTime,
+                    OperatorId = operatorId
                 };
                 await _db.Records.AddAsync(record);
                 await _db.SaveChangesAsync();
             }
         }
 
-        public async Task EditRecord(DateTime dateTime, int visitorId, int surveyId)
+        public async Task EditRecord(DateTime dateTime, int visitorId, int surveyId, int operatorId)
         {
             var p = _db.Records.Where(p => p.Date == dateTime && p.SurveyId != 0).FirstOrDefault();
             if (p != null)
@@ -40,11 +41,12 @@ namespace Data.DAL.Repositories
                 p.VisitorId = visitorId;
                 p.SurveyId = surveyId;
                 p.Date = dateTime;
+                p.OperatorId = operatorId;
                 await _db.SaveChangesAsync();
             }
         }
 
-        public async Task RemoveRecord(DateTime dateTime, int visitorId, int surveyId)
+        public async Task RemoveRecord(DateTime dateTime)
         {
             var p = _db.Records.Where(p => p.Date == dateTime && p.SurveyId != 0).FirstOrDefault();
             if (p != null)
