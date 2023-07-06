@@ -18,7 +18,7 @@ namespace Data.DAL.Repositories
             _db = db;
         }
 
-        public void AddVisitor(int id, string firstName, string lastName, string fatherName, string city, string gender, 
+        public async Task AddVisitor(string firstName, string lastName, string fatherName, string city, string gender, 
             DateTime birthDate, string nationality, int passportSeries, int passportNumber, DateTime dateIssue)
         {
             var p = _db.Visitors.Where(q => q.PassportSeries == passportSeries && q.PassportNumber == passportNumber).FirstOrDefault();
@@ -38,12 +38,12 @@ namespace Data.DAL.Repositories
                     DateIssue = dateIssue
                 };
 
-                _db.Visitors.Add(visitor);
-                _db.SaveChanges();
+                await _db.Visitors.AddAsync(visitor);
+                await _db.SaveChangesAsync();
             }
         }
 
-        public void EditVisitor(string firstName, string lastName, string fatherName, string city, string gender,
+        public async Task EditVisitor(string firstName, string lastName, string fatherName, string city, string gender,
             DateTime birthDate, string nationality, int passportSeries, int passportNumber, DateTime dateIssue)
         {
             var p = _db.Visitors.Where(q => q.PassportSeries == passportSeries && q.PassportNumber == passportNumber).FirstOrDefault();
@@ -59,16 +59,19 @@ namespace Data.DAL.Repositories
                 p.PassportNumber = passportNumber;
                 p.PassportSeries = passportSeries;
                 p.DateIssue = dateIssue;
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
             }
         }
 
-        public void Remove(int passportSeries, int passportNumber)
+        public async Task Remove(int passportSeries, int passportNumber)
         {
             var p = _db.Visitors.Where(q => q.PassportSeries == passportSeries && q.PassportNumber == passportNumber).FirstOrDefault();
-            if (p != null) { _db.Visitors.Remove(p); _db.SaveChanges(); }
+            if (p != null) { _db.Visitors.Remove(p); await _db.SaveChangesAsync(); }
         }
 
-
+        public List<Visitor> GetVisitor()
+        {
+            return _db.Visitors.ToList();
+        }
     }
 }

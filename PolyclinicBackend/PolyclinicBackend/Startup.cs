@@ -40,6 +40,8 @@ namespace PolyclinicBackend
 
             services.AddDbContext<VisitorsContext>(options => options.UseNpgsql(Configuration.GetConnectionString("VisitorDataConnection")));
             services.AddTransient<VisitorRepository>();
+            services.AddTransient<RecordRepository>();
+            services.AddTransient<SurveyRepository>();
 
             services.AddControllersWithViews();
         }

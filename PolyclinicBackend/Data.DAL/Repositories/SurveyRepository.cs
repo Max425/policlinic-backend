@@ -19,7 +19,7 @@ namespace Data.DAL.Repositories
             _db = visitorsContext;
         }
 
-        public void AddSurvey(string title, int price)
+        public async Task AddSurvey(string title, int price)
         {
             var p = _db.Surveys.Where(p => p.Title == title).FirstOrDefault();
             if (p == null)
@@ -29,30 +29,35 @@ namespace Data.DAL.Repositories
                     Title = title,
                     Price = price
                 };
-                _db.Add(survey);
-                _db.SaveChanges();
+                await _db.AddAsync(survey);
+                await _db.SaveChangesAsync();
             }
         }
 
-        public void EditSurvey(string title, int price)
+        public async Task EditSurvey(string title, int price)
         {
             var p = _db.Surveys.Where(p => p.Title == title).FirstOrDefault();
             if(p != null)
             {
                 p.Title = title;
                 p.Price = price;
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
             }
         }
 
-        public void RemoveSurvey(string title)
+        public async Task RemoveSurvey(string title)
         {
             var p = _db.Surveys.Where(p => p.Title == title).FirstOrDefault();
             if (p != null)
             {
                 _db.Remove(p);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
             }
+        }
+
+        public List<Survey> GetSurveys()
+        {
+            return _db.Surveys.ToList();
         }
     }
 }

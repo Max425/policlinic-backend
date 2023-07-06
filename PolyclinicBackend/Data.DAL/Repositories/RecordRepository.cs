@@ -16,10 +16,10 @@ namespace Data.DAL.Repositories
             _db = visitorsContext;
         }
 
-        public void AddRecord(DateTime dateTime, int visitorId, int surveyId)
+        public async Task AddRecord(DateTime dateTime, int visitorId, int surveyId)
         {
             var p = _db.Records.Where(p => p.Date == dateTime && p.SurveyId != 0).FirstOrDefault();
-            if(p == null)
+            if (p == null)
             {
                 var record = new Record
                 {
@@ -27,31 +27,36 @@ namespace Data.DAL.Repositories
                     SurveyId = surveyId,
                     Date = dateTime
                 };
-                _db.Records.Add(record);
-                _db.SaveChanges();
+                await _db.Records.AddAsync(record);
+                await _db.SaveChangesAsync();
             }
         }
 
-        public void EditRecord(DateTime dateTime, int visitorId, int surveyId)
+        public async Task EditRecord(DateTime dateTime, int visitorId, int surveyId)
         {
             var p = _db.Records.Where(p => p.Date == dateTime && p.SurveyId != 0).FirstOrDefault();
-            if(p != null)
+            if (p != null)
             {
                 p.VisitorId = visitorId;
                 p.SurveyId = surveyId;
                 p.Date = dateTime;
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
             }
         }
 
-        public void RemoveRecord(DateTime dateTime, int visitorId, int surveyId)
+        public async Task RemoveRecord(DateTime dateTime, int visitorId, int surveyId)
         {
             var p = _db.Records.Where(p => p.Date == dateTime && p.SurveyId != 0).FirstOrDefault();
             if (p != null)
             {
                 _db.Remove(p);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
             }
+        }
+
+        public List<Record> GetRecord()
+        {
+            return _db.Records.ToList();
         }
     }
 }

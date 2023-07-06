@@ -15,7 +15,6 @@ namespace Data.DAL.Context
         public DbSet<Visitor> Visitors { get; set; }
         public VisitorsContext(DbContextOptions<VisitorsContext> options) : base(options)
         {
-            Database.EnsureDeleted();
             Database.EnsureCreated();
         }
     }
