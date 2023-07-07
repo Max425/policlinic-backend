@@ -10,10 +10,10 @@ namespace Data.DAL.Repositories
 {
     public class RecordRepository
     {
-        VisitorsContext _db;
-        public RecordRepository(VisitorsContext visitorsContext)
+        PolyclinicContext _db;
+        public RecordRepository(PolyclinicContext polyclinicContext)
         {
-            _db = visitorsContext;
+            _db = polyclinicContext;
         }
 
         public async Task AddRecord(DateTime dateTime, int visitorId, int surveyId, int operatorId)
