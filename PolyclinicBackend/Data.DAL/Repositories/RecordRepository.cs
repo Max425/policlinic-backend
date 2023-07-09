@@ -1,64 +1,59 @@
-﻿using Data.DAL.Context;
+﻿using Data.DAL.BDExceptions;
+using Data.DAL.Context;
 using Data.DAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
-namespace Data.DAL.Repositories
+namespace Data.DAL.Repositories;
+
+public class RecordRepository
 {
-    public class RecordRepository
+    private readonly PolyclinicContext _db;
+    
+    public RecordRepository(PolyclinicContext polyclinicContext)
     {
-        PolyclinicContext _db;
-        public RecordRepository(PolyclinicContext polyclinicContext)
-        {
-            _db = polyclinicContext;
-        }
+        _db = polyclinicContext;
+    }
 
-        public async Task AddRecord(DateTime dateTime, int visitorId, int surveyId, int operatorId)
+    public async Task AddRecord(DateTime dateTime, int visitorId, int surveyId, int operatorId)
+    {
+        var p = _db.Records.Where(p => p.Date == dateTime && p.SurveyId != 0).FirstOrDefault();
+        if (p != null)
+            throw new ObjectAlreadyExistsException();
+            
+        var record = new Record
         {
-            var p = _db.Records.Where(p => p.Date == dateTime && p.SurveyId != 0).FirstOrDefault();
-            if (p == null)
-            {
-                var record = new Record
-                {
-                    VisitorId = visitorId,
-                    SurveyId = surveyId,
-                    Date = dateTime,
-                    OperatorId = operatorId
-                };
-                await _db.Records.AddAsync(record);
-                await _db.SaveChangesAsync();
-            }
-        }
+            VisitorId = visitorId,
+            SurveyId = surveyId,
+            Date = dateTime,
+            OperatorId = operatorId
+        };
+        await _db.Records.AddAsync(record);
+        await _db.SaveChangesAsync();
+    }
 
-        public async Task EditRecord(DateTime dateTime, int visitorId, int surveyId, int operatorId)
-        {
-            var p = _db.Records.Where(p => p.Date == dateTime && p.SurveyId != 0).FirstOrDefault();
-            if (p != null)
-            {
-                p.VisitorId = visitorId;
-                p.SurveyId = surveyId;
-                p.Date = dateTime;
-                p.OperatorId = operatorId;
-                await _db.SaveChangesAsync();
-            }
-        }
+    public async Task EditRecord(DateTime dateTime, int visitorId, int surveyId, int operatorId)
+    {
+        var p = _db.Records.Where(p => p.Date == dateTime && p.SurveyId != 0).FirstOrDefault() 
+            ?? throw new ObjectNotFoundException();
+            
+        p.VisitorId = visitorId;
+        p.SurveyId = surveyId;
+        p.Date = dateTime;
+        p.OperatorId = operatorId;
+        await _db.SaveChangesAsync();
+    }
 
-        public async Task RemoveRecord(DateTime dateTime)
-        {
-            var p = _db.Records.Where(p => p.Date == dateTime && p.SurveyId != 0).FirstOrDefault();
-            if (p != null)
-            {
-                _db.Remove(p);
-                await _db.SaveChangesAsync();
-            }
-        }
+    public async Task RemoveRecord(DateTime dateTime)
+    {
+        var p = _db.Records.Where(p => p.Date == dateTime && p.SurveyId != 0).FirstOrDefault() 
+            ?? throw new ObjectNotFoundException();
+            
+        _db.Remove(p);
+        await _db.SaveChangesAsync();
+    }
 
-        public List<Record> GetRecord()
-        {
-            return _db.Records.ToList();
-        }
+    public async Task<List<Record>> GetRecord()
+    {
+        return await _db.Records.ToListAsync();
     }
 }

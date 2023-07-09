@@ -41,7 +41,7 @@ public class Startup
             });
         });
 
-        services.AddDbContext<PolyclinicContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DataConnection")));
+        services.AddDbContext<PolyclinicContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DopDataConnection")));
 
         services.AddTransient<VisitorRepository>();
         services.AddTransient<RecordRepository>();

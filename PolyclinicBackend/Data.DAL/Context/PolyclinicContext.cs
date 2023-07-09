@@ -13,6 +13,10 @@ public class PolyclinicContext : DbContext
     public DbSet<Credential> Credentials { get; set; }
     public DbSet<Operator> Operators { get; set; }
 
+    public PolyclinicContext(DbContextOptions<PolyclinicContext> options) : base(options)
+    {
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=polyclinic;Username=postgres;Password=1474"); // TODO: сюда нужно конфиг прокинуть
