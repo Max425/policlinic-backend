@@ -1,4 +1,5 @@
 ﻿using Data.DAL.Repositories;
+using Data.DAL.DBExceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PolyclinicBackend.Controllers;
@@ -35,7 +36,7 @@ public class InteractionsWithDBController : Controller
         birthDate, nationality, passportSeries, photoBase64, passportNumber, dateIssue);
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -48,7 +49,7 @@ public class InteractionsWithDBController : Controller
             await _recordRepository.AddRecord(date, visId, surveyId, operatorId);
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -61,7 +62,7 @@ public class InteractionsWithDBController : Controller
             await _surveyRepository.AddSurvey(title, price);
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -74,7 +75,7 @@ public class InteractionsWithDBController : Controller
             await _doctorRepository.AddDoctor(fullName, cabinetNumber, surveyId);
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -87,7 +88,7 @@ public class InteractionsWithDBController : Controller
             await _credentialsRepository.AddCredential(login, password, operatorId);
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -100,7 +101,7 @@ public class InteractionsWithDBController : Controller
             await _operatorRepository.AddOperator(firstName, lastName, fatherName);
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -115,7 +116,7 @@ public class InteractionsWithDBController : Controller
             birthDate, nationality, passportSeries, photoBase64, passportNumber, dateIssue);
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -128,7 +129,7 @@ public class InteractionsWithDBController : Controller
             await _recordRepository.EditRecord(date, visId, surveyId, operatorId);
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -141,7 +142,7 @@ public class InteractionsWithDBController : Controller
             await _surveyRepository.EditSurvey(title, price);
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -154,7 +155,7 @@ public class InteractionsWithDBController : Controller
             await _doctorRepository.EditDoctor(fullName, cabinetNumber, surveyId);
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -167,7 +168,7 @@ public class InteractionsWithDBController : Controller
             await _visitorRepository.Remove(passportSeries, passportNumber);
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -180,7 +181,7 @@ public class InteractionsWithDBController : Controller
             await _recordRepository.RemoveRecord(dateTime);
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -193,7 +194,7 @@ public class InteractionsWithDBController : Controller
             await _surveyRepository.RemoveSurvey(title);
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -206,7 +207,7 @@ public class InteractionsWithDBController : Controller
             await _doctorRepository.RemoveDoctor(fullName, cabinetNumber, surveyId);
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 }
