@@ -1,5 +1,6 @@
 ﻿using Data.DAL.Context;
 using Data.DAL.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,39 +17,32 @@ namespace Data.DAL.Repositories
             _db = polyclinicContext;
         }
 
-        public async Task AddRecord(DateTime dateTime, int visitorId, int surveyId, int operatorId)
+        public async Task AddRecord(Record record)
         {
-            var p = _db.Records.Where(p => p.Date == dateTime && p.SurveyId != 0).FirstOrDefault();
+            var p = _db.Records.Where(p => p.DateTime == record.DateTime && p.SurveyId != 0).FirstOrDefault();
             if (p == null)
             {
-                var record = new Record
-                {
-                    VisitorId = visitorId,
-                    SurveyId = surveyId,
-                    Date = dateTime,
-                    OperatorId = operatorId
-                };
                 await _db.Records.AddAsync(record);
                 await _db.SaveChangesAsync();
             }
         }
 
-        public async Task EditRecord(DateTime dateTime, int visitorId, int surveyId, int operatorId)
+        public async Task EditRecord(Record record)
         {
-            var p = _db.Records.Where(p => p.Date == dateTime && p.SurveyId != 0).FirstOrDefault();
+            var p = _db.Records.Where(p => p.DateTime == record.DateTime && p.SurveyId != 0).FirstOrDefault();
             if (p != null)
             {
-                p.VisitorId = visitorId;
-                p.SurveyId = surveyId;
-                p.Date = dateTime;
-                p.OperatorId = operatorId;
+                p.VisitorId = record.VisitorId;
+                p.SurveyId = record.SurveyId;
+                p.DateTime = record.DateTime;
+                p.OperatorId = record.OperatorId;
                 await _db.SaveChangesAsync();
             }
         }
 
-        public async Task RemoveRecord(DateTime dateTime)
+        public async Task RemoveRecord(Record record)
         {
-            var p = _db.Records.Where(p => p.Date == dateTime && p.SurveyId != 0).FirstOrDefault();
+            var p = _db.Records.Where(p => p.DateTime == record.DateTime && p.SurveyId != 0).FirstOrDefault();
             if (p != null)
             {
                 _db.Remove(p);
@@ -56,9 +50,9 @@ namespace Data.DAL.Repositories
             }
         }
 
-        public List<Record> GetRecord()
+        public async Task<List<Record>> GetRecords()
         {
-            return _db.Records.ToList();
+            return await _db.Records.ToListAsync();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Data.BLL.DTO;
+﻿using Data.DAL.Entities;
+
+namespace Data.BLL.DTO;
 
 public class RecordDTO
 {
@@ -6,4 +8,5 @@ public class RecordDTO
     public DateTime Date { get; set; }
     public int VisitorId { get; set; }
     public int SurveyId { get; set; }
+    public int OperatorId { get; set; }
 }

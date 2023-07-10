@@ -1,5 +1,6 @@
 ﻿using Data.DAL.Context;
 using Data.DAL.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,34 +17,28 @@ namespace Data.DAL.Repositories
             _db = polyclinicContext;
         }
 
-        public async Task AddCredential(string login, string password, int operatorId)
+        public async Task AddCredential(Credential credential)
         {
-            var credential = new Credential
-            {
-                Login = login,
-                Password = password,
-                OperatorId = operatorId
-            };
             await _db.AddAsync(credential);
             await _db.SaveChangesAsync();
         }
 
-        public async Task EditCredential(string login, string password, int operatorId)
+        public async Task EditCredential(Credential credential)
         {
-            var p = _db.Credentials.Where(p => p.Login == login).FirstOrDefault();
+            var p = _db.Credentials.Where(p => p.Login == credential.Login).FirstOrDefault();
             if (p != null)
             {
-                p.Login = login;
-                p.Password = password;
-                p.OperatorId = operatorId;
+                p.Login = credential.Login;
+                p.Password = credential.Password;
+                p.OperatorId = credential.OperatorId;
             }
 
             await _db.SaveChangesAsync();
         }
 
-        public async Task RemoveCredential(string login)
+        public async Task RemoveCredential(Credential credential)
         {
-            var p = _db.Credentials.Where(p => p.Login == login).FirstOrDefault();
+            var p = _db.Credentials.Where(p => p.Login == credential.Login).FirstOrDefault();
             if (p != null) 
             { 
                 _db.Remove(p); 
@@ -51,18 +46,28 @@ namespace Data.DAL.Repositories
             }
         }
 
-        public bool CheckPassword(string login, string password)
+        public bool CheckPassword(Credential credential)
         {
-            var p = _db.Credentials.Where(p => p.Login == login).FirstOrDefault();
+            var p = _db.Credentials.Where(p => p.Login == credential.Login).FirstOrDefault();
             if (p != null)
             {
-                if(p.Login == login && p.Password == password)
+                if(p.Login == credential.Login && p.Password == credential.Password)
                 {
                     return true;
                 }
                 return false;
             }
             return false;
+        }
+
+        public async Task<List<Credential>> GetCredentials()
+        {
+            return await _db.Credentials.ToListAsync();
+        }
+
+        public async Task<Credential> GetCredential(Credential credential)
+        {
+            return await _db.Credentials.Where(p => p.Login == credential.Login && p.Password == credential.Password).FirstOrDefaultAsync();
         }
     }
 }

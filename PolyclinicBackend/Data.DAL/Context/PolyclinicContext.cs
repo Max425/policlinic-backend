@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.DAL.Context;
 
-public class PolyclinicContext : DbContext
+public class PolyclinicContext : IdentityDbContext<Credential>
 {
     public DbSet<Record> Records { get; set; }
     public DbSet<Survey> Surveys { get; set; }

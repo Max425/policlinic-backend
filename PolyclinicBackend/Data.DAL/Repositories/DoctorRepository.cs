@@ -1,5 +1,6 @@
 ﻿using Data.DAL.Context;
 using Data.DAL.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Data.DAL.Repositories;
 
@@ -12,37 +13,31 @@ public class DoctorRepository
         _db = polyclinicContext;
     }
 
-    public async Task AddDoctor(string fullName, int cabinetNumber, int surveyId)
+    public async Task AddDoctor(Doctor doctor)
     {
-        var p = _db.Doctors.Where(p => p.FullName == fullName && p.CabinetNumber == cabinetNumber && p.SurveyId == surveyId).FirstOrDefault();
+        var p = _db.Doctors.Where(p => p.FullName == doctor.FullName && p.CabinetNumber == doctor.CabinetNumber && p.SurveyId == doctor.SurveyId).FirstOrDefault();
         if (p == null)
         {
-            var doctor = new Doctor
-            {
-                FullName = fullName,
-                CabinetNumber = cabinetNumber,
-                SurveyId = surveyId
-            };
             await _db.AddAsync(doctor);
             await _db.SaveChangesAsync();
         }
     }
 
-    public async Task EditDoctor(string fullName, int cabinetNumber, int surveyId)
+    public async Task EditDoctor(Doctor doctor)
     {
-        var p = _db.Doctors.Where(p => p.FullName == fullName && p.CabinetNumber == cabinetNumber && p.SurveyId == surveyId).FirstOrDefault();
+        var p = _db.Doctors.Where(p => p.FullName == doctor.FullName && p.CabinetNumber == doctor.CabinetNumber && p.SurveyId == doctor.SurveyId).FirstOrDefault();
         if(p != null)
         {
-            p.FullName = fullName;
-            p.CabinetNumber = cabinetNumber;
-            p.SurveyId = surveyId;
+            p.FullName = doctor.FullName;
+            p.CabinetNumber = doctor.CabinetNumber;
+            p.SurveyId = doctor.SurveyId;
             await _db.SaveChangesAsync();
         }
     }
 
-    public async Task RemoveDoctor(string fullName, int cabinetNumber, int surveyId)
+    public async Task RemoveDoctor(Doctor doctor)
     {
-        var p = _db.Doctors.Where(p => p.FullName == fullName && p.CabinetNumber == cabinetNumber && p.SurveyId == surveyId).FirstOrDefault();
+        var p = _db.Doctors.Where(p => p.FullName == doctor.FullName && p.CabinetNumber == doctor.CabinetNumber && p.SurveyId == doctor.SurveyId).FirstOrDefault();
         if (p != null)
         {
             _db.Remove(p);
@@ -50,8 +45,8 @@ public class DoctorRepository
         }
     }
 
-    public List<Doctor> GetDoctors()
+    public async Task<List<Doctor>> GetDoctors()
     {
-        return _db.Doctors.ToList();
+        return await _db.Doctors.ToListAsync();
     }
 }

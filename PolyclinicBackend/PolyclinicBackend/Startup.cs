@@ -5,6 +5,22 @@ using Microsoft.EntityFrameworkCore;
 using Data.DAL.Repositories;
 using Data.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
+using Data.BLL.Service;
+using Data.BLL.DTO;
+using Data.DAL;
+using Data.BLL.Facade;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Builder;
+using System;
+using Microsoft.AspNetCore.Authentication;
 
 namespace PolyclinicBackend;
 
@@ -17,7 +33,9 @@ public class Startup
 
     public IConfiguration Configuration { get; }
 
-    public void CoufigureAuth(IApplicationBuilder app) { }
+    public void CoufigureAuth(IEndpointRouteBuilder app, CredentialService credentialService) 
+    {
+    }
 
     public void ConfigureServices(IServiceCollection services)
     {
@@ -43,6 +61,9 @@ public class Startup
 
         services.AddDbContext<PolyclinicContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DataConnection")));
 
+        /*services.AddIdentity<Credential, IdentityRole>()
+                .AddEntityFrameworkStores<PolyclinicContext>();*/
+
         services.AddTransient<VisitorRepository>();
         services.AddTransient<RecordRepository>();
         services.AddTransient<SurveyRepository>();
@@ -50,7 +71,20 @@ public class Startup
         services.AddTransient<CredentialsRepository>();
         services.AddTransient<OperatorRepository>();
 
+        services.AddTransient<CredentialService>();
+        services.AddTransient<DoctorService>();
+        services.AddTransient<OperatorService>();
+        services.AddTransient<RecordService>();
+        services.AddTransient<VisitorService>();
+        services.AddTransient<SurveyService>();
+
+        services.AddTransient<Facade>();
+
         services.AddControllersWithViews();
+
+        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options => options.LoginPath = "/login");
+        services.AddAuthorization();
     }
 
     public void Configure(IApplicationBuilder app)
@@ -63,11 +97,14 @@ public class Startup
             c.SwaggerEndpoint("/swagger/Login/swagger.json", "Login");
         });
         app.UseRouting();
+        app.UseAuthentication();
         app.UseAuthorization();
+
         app.UseEndpoints(endpoints => {
             endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
         });
+
     }
 }

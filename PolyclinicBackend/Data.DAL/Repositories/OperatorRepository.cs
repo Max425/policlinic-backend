@@ -1,5 +1,6 @@
 ﻿using Data.DAL.Context;
 using Data.DAL.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,37 +18,35 @@ namespace Data.DAL.Repositories
             _db = polyclinicContext;
         }
 
-        public async Task AddOperator(string firstName, string lastName, string FatherName)
+        public async Task AddOperator(Operator oper)
         {
-            var p = new Operator
-            {
-                FirstName = firstName,
-                LastName = lastName,
-                FatherName = FatherName
-            };
-
-            await _db.AddAsync(p);
+            await _db.AddAsync(oper);
             await _db.SaveChangesAsync();
         }
 
-        public async Task EditOperator(string firstName, string lastName, string fatherName)
+        public async Task EditOperator(Operator oper)
         {
-            var p = _db.Operators.Where(p => p.FirstName == firstName && p.LastName == lastName && p.FatherName == fatherName).FirstOrDefault();
+            var p = _db.Operators.Where(p => p.FirstName == oper.FirstName && p.LastName == oper.LastName && p.FatherName == oper.FatherName).FirstOrDefault();
             if (p != null)
             {
-                p.FirstName = firstName;
-                p.LastName = lastName;
-                p.FatherName = fatherName;
+                p.FirstName = oper.FirstName;
+                p.LastName = oper.LastName;
+                p.FatherName = oper.FatherName;
             }
 
             await _db.SaveChangesAsync();
         }
 
-        public async Task RemoveOperator(string firstName, string lastName, string fatherName)
+        public async Task RemoveOperator(Operator oper)
         {
-            var p = _db.Operators.Where(p => p.FirstName == firstName && p.LastName == lastName && p.FatherName == fatherName).FirstOrDefault();
+            var p = _db.Operators.Where(p => p.FirstName == oper.FirstName && p.LastName == oper.LastName && p.FatherName == oper.FatherName).FirstOrDefault();
             if (p != null) { _db.Remove(p); }
             await _db.SaveChangesAsync();
+        }
+
+        public async Task<List<Operator>> GetOperators()
+        {
+            return await _db.Operators.ToListAsync();
         }
     }
 }

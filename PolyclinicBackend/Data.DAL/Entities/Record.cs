@@ -3,7 +3,7 @@
 public class Record
 {
     public int Id { get; set; }
-    public DateTime Date { get; set; }
+    public DateTime DateTime { get; set; }
     public int VisitorId { get; set; }
     public Visitor Visitor { get; set; }
     public int SurveyId { get; set; }

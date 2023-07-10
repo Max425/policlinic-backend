@@ -1,5 +1,6 @@
 ﻿using Data.DAL.Context;
 using Data.DAL.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Data.DAL.Repositories;
 
@@ -12,35 +13,30 @@ public class SurveyRepository
         _db = polyclinicContext;
     }
 
-    public async Task AddSurvey(string title, int price)
+    public async Task AddSurvey(Survey survey)
     {
-        var p = _db.Surveys.Where(p => p.Title == title).FirstOrDefault();
+        var p = _db.Surveys.Where(p => p.Title == survey.Title).FirstOrDefault();
         if (p == null)
         {
-            var survey = new Survey
-            {
-                Title = title,
-                Price = price
-            };
             await _db.AddAsync(survey);
             await _db.SaveChangesAsync();
         }
     }
 
-    public async Task EditSurvey(string title, int price)
+    public async Task EditSurvey(Survey survey)
     {
-        var p = _db.Surveys.Where(p => p.Title == title).FirstOrDefault();
+        var p = _db.Surveys.Where(p => p.Title == survey.Title).FirstOrDefault();
         if(p != null)
         {
-            p.Title = title;
-            p.Price = price;
+            p.Title = survey.Title;
+            p.Price = survey.Price;
             await _db.SaveChangesAsync();
         }
     }
 
-    public async Task RemoveSurvey(string title)
+    public async Task RemoveSurvey(Survey survey)
     {
-        var p = _db.Surveys.Where(p => p.Title == title).FirstOrDefault();
+        var p = _db.Surveys.Where(p => p.Title == survey.Title).FirstOrDefault();
         if (p != null)
         {
             _db.Remove(p);
@@ -48,8 +44,8 @@ public class SurveyRepository
         }
     }
 
-    public List<Survey> GetSurveys()
+    public async Task<List<Survey>> GetSurveys()
     {
-        return _db.Surveys.ToList();
+        return await _db.Surveys.ToListAsync();
     }
 }

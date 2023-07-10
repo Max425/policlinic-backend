@@ -1,5 +1,6 @@
 ﻿using Data.DAL.Context;
 using Data.DAL.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Data.DAL.Repositories;
 
@@ -12,61 +13,44 @@ public class VisitorRepository
         _db = polyclinicContext;
     }
 
-    public async Task AddVisitor(string firstName, string lastName, string fatherName, string city, string gender, 
-        DateTime birthDate, string nationality, int passportSeries, string photoBase64, int passportNumber, DateTime dateIssue)
+    public async Task AddVisitor(Visitor visitor)
     {
-        var p = _db.Visitors.Where(q => q.PassportSeries == passportSeries && q.PassportNumber == passportNumber).FirstOrDefault();
+        var p = _db.Visitors.Where(q => q.PassportSeries == visitor.PassportSeries && q.PassportNumber == visitor.PassportNumber).FirstOrDefault();
         if(p == null)
         {
-            var visitor = new Visitor
-            {
-                FirstName = firstName,
-                LastName = lastName,
-                FatherName = fatherName,
-                City = city,
-                Gender = gender,
-                BirthDate = birthDate,
-                Nationality = nationality,
-                PassportSeries = passportSeries,
-                PhotoBase64 = photoBase64,
-                PassportNumber = passportNumber,
-                DateIssue = dateIssue
-            };
-
             await _db.Visitors.AddAsync(visitor);
             await _db.SaveChangesAsync();
         }
     }
 
-    public async Task EditVisitor(string firstName, string lastName, string fatherName, string city, string gender,
-        DateTime birthDate, string nationality, int passportSeries, string photoBase64, int passportNumber, DateTime dateIssue)
+    public async Task EditVisitor(Visitor visitor)
     {
-        var p = _db.Visitors.Where(q => q.PassportSeries == passportSeries && q.PassportNumber == passportNumber).FirstOrDefault();
+        var p = _db.Visitors.Where(q => q.PassportSeries == visitor.PassportSeries && q.PassportNumber == visitor.PassportNumber).FirstOrDefault();
         if(p != null)
         {
-            p.FirstName = firstName;
-            p.LastName = lastName;
-            p.FatherName = fatherName;
-            p.City = city;
-            p.Gender = gender;
-            p.BirthDate = birthDate;
-            p.Nationality = nationality;
-            p.PassportNumber = passportNumber;
-            p.PhotoBase64 = photoBase64;
-            p.PassportSeries = passportSeries;
-            p.DateIssue = dateIssue;
+            p.FirstName = visitor.FirstName;
+            p.LastName = visitor.LastName;
+            p.FatherName = visitor.FatherName;
+            p.City = visitor.City;
+            p.Gender = visitor.Gender;
+            p.BirthDate = visitor.BirthDate;
+            p.Nationality = visitor.Nationality;
+            p.PassportNumber = visitor.PassportNumber;
+            p.PhotoBase64 = visitor.PhotoBase64;
+            p.PassportSeries = visitor.PassportSeries;
+            p.DateIssue = visitor.DateIssue;
             await _db.SaveChangesAsync();
         }
     }
 
-    public async Task Remove(int passportSeries, int passportNumber)
+    public async Task Remove(Visitor visitor)
     {
-        var p = _db.Visitors.Where(q => q.PassportSeries == passportSeries && q.PassportNumber == passportNumber).FirstOrDefault();
+        var p = _db.Visitors.Where(q => q.PassportSeries == visitor.PassportSeries && q.PassportNumber == visitor.PassportNumber).FirstOrDefault();
         if (p != null) { _db.Visitors.Remove(p); await _db.SaveChangesAsync(); }
     }
 
-    public List<Visitor> GetVisitor()
+    public async Task<List<Visitor>> GetVisitors()
     {
-        return _db.Visitors.ToList();
+        return await _db.Visitors.ToListAsync();
     }
 }
