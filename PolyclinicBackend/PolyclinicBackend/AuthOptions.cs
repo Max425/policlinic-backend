@@ -8,7 +8,10 @@ namespace PolyclinicBackend
         public const string ISSUER = "MyAuthServer";
         public const string AUDIENCE = "MyAuthClient";
         const string KEY = "mysupersecret_secretkey!123";
-        public static SymmetricSecurityKey GetSymmetricSecurityKey() =>
-            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
+        public const int LIFETIME = 1;
+        public static SymmetricSecurityKey GetSymmetricSecurityKey()
+        {
+            return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(KEY));
+        }
     }
 }

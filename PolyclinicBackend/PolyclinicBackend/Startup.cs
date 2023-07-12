@@ -39,7 +39,6 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-
         services.AddControllers();
         services.AddSwaggerGen(c => {
             c.SwaggerDoc("Polyclinic", new OpenApiInfo
@@ -61,8 +60,23 @@ public class Startup
 
         services.AddDbContext<PolyclinicContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DataConnection")));
 
-        /*services.AddIdentity<Credential, IdentityRole>()
-                .AddEntityFrameworkStores<PolyclinicContext>();*/
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.RequireHttpsMetadata = false;
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidIssuer = AuthOptions.ISSUER,
+                ValidateAudience = true,
+                ValidAudience = AuthOptions.AUDIENCE,
+                ValidateLifetime = true,
+                IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                ValidateIssuerSigningKey = true,
+            };
+        });
+
+        services.AddControllersWithViews();
 
         services.AddTransient<VisitorRepository>();
         services.AddTransient<RecordRepository>();
@@ -81,9 +95,9 @@ public class Startup
         services.AddTransient<Facade>();
 
         services.AddControllersWithViews();
+        services.AddRazorPages();
 
-        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options => options.LoginPath = "/login");
+        services.AddAuthentication();
         services.AddAuthorization();
     }
 

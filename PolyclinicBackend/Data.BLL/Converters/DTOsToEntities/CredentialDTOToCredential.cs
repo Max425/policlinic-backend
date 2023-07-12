@@ -17,6 +17,7 @@ namespace Data.BLL.Converters.DTOsToEntities
                 Id = credentialDTO.Id,
                 Login = credentialDTO.Login,
                 Password = credentialDTO.Password,
+                Role = credentialDTO.Role,
                 OperatorId = credentialDTO.OperatorId,
             };
             return entity;

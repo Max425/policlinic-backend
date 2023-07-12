@@ -30,6 +30,7 @@ namespace Data.DAL.Repositories
             {
                 p.Login = credential.Login;
                 p.Password = credential.Password;
+                p.Role = credential.Role;
                 p.OperatorId = credential.OperatorId;
             }
 
@@ -65,9 +66,9 @@ namespace Data.DAL.Repositories
             return await _db.Credentials.ToListAsync();
         }
 
-        public async Task<Credential> GetCredential(Credential credential)
+        public Credential GetCredential(Credential credential)
         {
-            return await _db.Credentials.Where(p => p.Login == credential.Login && p.Password == credential.Password).FirstOrDefaultAsync();
+            return _db.Credentials.Where(p => p.Login == credential.Login && p.Password == credential.Password).FirstOrDefault();
         }
     }
 }

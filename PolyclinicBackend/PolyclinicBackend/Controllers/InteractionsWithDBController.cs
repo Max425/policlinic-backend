@@ -21,6 +21,7 @@ public class InteractionsWithDBController : Controller
         _facade = facade;
     }
 
+
     [HttpGet("GetVisitors")]
     public async Task<IActionResult> GetVisitors()
     {

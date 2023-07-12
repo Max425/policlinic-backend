@@ -48,10 +48,10 @@ namespace Data.BLL.Service
             return await _credentialsRepository.GetCredentials();
         }
 
-        public async Task<Credential> GetCredential(CredentialDTO credentialDTO)
+        public Credential GetCredential(CredentialDTO credentialDTO)
         {
             var entity = CredentialDTOToCredential.Convert(credentialDTO);
-            return await _credentialsRepository.GetCredential(entity);
+            return _credentialsRepository.GetCredential(entity);
         }
     }
 }
