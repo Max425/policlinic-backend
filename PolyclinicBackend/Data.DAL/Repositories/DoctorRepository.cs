@@ -1,5 +1,7 @@
-﻿using Data.DAL.Context;
+﻿using Data.DAL.DBExceptions;
+using Data.DAL.Context;
 using Data.DAL.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Data.DAL.Repositories;
 
@@ -15,43 +17,41 @@ public class DoctorRepository
     public async Task AddDoctor(string fullName, int cabinetNumber, int surveyId)
     {
         var p = _db.Doctors.Where(p => p.FullName == fullName && p.CabinetNumber == cabinetNumber && p.SurveyId == surveyId).FirstOrDefault();
-        if (p == null)
+        if (p != null)
+            throw new ObjectAlreadyExistsException();
+        
+        var doctor = new Doctor
         {
-            var doctor = new Doctor
-            {
-                FullName = fullName,
-                CabinetNumber = cabinetNumber,
-                SurveyId = surveyId
-            };
-            await _db.AddAsync(doctor);
-            await _db.SaveChangesAsync();
-        }
+            FullName = fullName,
+            CabinetNumber = cabinetNumber,
+            SurveyId = surveyId
+        };
+        await _db.Doctors.AddAsync(doctor);
+        await _db.SaveChangesAsync();
     }
 
     public async Task EditDoctor(string fullName, int cabinetNumber, int surveyId)
     {
-        var p = _db.Doctors.Where(p => p.FullName == fullName && p.CabinetNumber == cabinetNumber && p.SurveyId == surveyId).FirstOrDefault();
-        if(p != null)
-        {
-            p.FullName = fullName;
-            p.CabinetNumber = cabinetNumber;
-            p.SurveyId = surveyId;
-            await _db.SaveChangesAsync();
-        }
+        var p = _db.Doctors.Where(p => p.FullName == fullName && p.CabinetNumber == cabinetNumber && 
+                        p.SurveyId == surveyId).FirstOrDefault() ?? throw new ObjectNotFoundException();
+        
+        p.FullName = fullName;
+        p.CabinetNumber = cabinetNumber;
+        p.SurveyId = surveyId;
+        await _db.SaveChangesAsync();
     }
 
     public async Task RemoveDoctor(string fullName, int cabinetNumber, int surveyId)
     {
-        var p = _db.Doctors.Where(p => p.FullName == fullName && p.CabinetNumber == cabinetNumber && p.SurveyId == surveyId).FirstOrDefault();
-        if (p != null)
-        {
-            _db.Remove(p);
-            await _db.SaveChangesAsync();
-        }
+        var p = _db.Doctors.Where(p => p.FullName == fullName && p.CabinetNumber == cabinetNumber && 
+                        p.SurveyId == surveyId).FirstOrDefault() ?? throw new ObjectNotFoundException();
+        
+        _db.Remove(p);
+        await _db.SaveChangesAsync();
     }
 
-    public List<Doctor> GetDoctors()
+    public async Task<List<Doctor>> GetDoctors()
     {
-        return _db.Doctors.ToList();
+        return await _db.Doctors.ToListAsync();
     }
 }
