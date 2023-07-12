@@ -1,6 +1,7 @@
 using Data.BLL.DTO;
 using Data.BLL.Facade;
 using Data.BLL.Service;
+using Data.DAL.DBExceptions;
 using Data.DAL.Entities;
 using Data.DAL.Repositories;
 using Microsoft.AspNetCore.Authorization;
