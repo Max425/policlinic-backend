@@ -1,4 +1,5 @@
-﻿using Data.DAL.Context;
+using Data.DAL.DBExceptions;
+using Data.DAL.Context;
 using Data.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,32 +17,25 @@ public class SurveyRepository
     public async Task AddSurvey(Survey survey)
     {
         var p = _db.Surveys.Where(p => p.Title == survey.Title).FirstOrDefault();
-        if (p == null)
-        {
-            await _db.AddAsync(survey);
-            await _db.SaveChangesAsync();
-        }
+        if (p != null)
+            throw new ObjectAlreadyExistsException();
+        await _db.Surveys.AddAsync(survey);
+        await _db.SaveChangesAsync();
     }
 
     public async Task EditSurvey(Survey survey)
     {
-        var p = _db.Surveys.Where(p => p.Title == survey.Title).FirstOrDefault();
-        if(p != null)
-        {
-            p.Title = survey.Title;
-            p.Price = survey.Price;
-            await _db.SaveChangesAsync();
-        }
+        var p = _db.Surveys.Where(p => p.Id == survey.Id).FirstOrDefault() ?? throw new ObjectNotFoundException();
+        p.Title = survey.Title;
+        p.Price = survey.Price;
+        await _db.SaveChangesAsync();
     }
 
     public async Task RemoveSurvey(Survey survey)
     {
-        var p = _db.Surveys.Where(p => p.Title == survey.Title).FirstOrDefault();
-        if (p != null)
-        {
-            _db.Remove(p);
-            await _db.SaveChangesAsync();
-        }
+        var p = _db.Surveys.Where(p => p.Title == survey.Title).FirstOrDefault() ?? throw new ObjectNotFoundException();
+        _db.Remove(p);
+        await _db.SaveChangesAsync();
     }
 
     public async Task<List<Survey>> GetSurveys()

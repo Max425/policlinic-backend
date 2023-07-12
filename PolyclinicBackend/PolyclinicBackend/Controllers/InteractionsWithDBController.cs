@@ -1,4 +1,4 @@
-﻿using Data.BLL.DTO;
+using Data.BLL.DTO;
 using Data.BLL.Facade;
 using Data.BLL.Service;
 using Data.DAL.Entities;
@@ -104,7 +104,7 @@ public class InteractionsWithDBController : Controller
             await _facade.VisitorService.AddVisitor(new VisitorDTO { FirstName = firstName, LastName = lastName, FatherName = fatherName, City = city, Gender = gender, BirthDate = birthDate, DateIssue = dateIssue, Nationality = nationality, PassportNumber = passportNumber, PassportSeries = passportSeries, PhotoBase64 = photoBase64 });
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -117,7 +117,7 @@ public class InteractionsWithDBController : Controller
             await _facade.RecordService.AddRecord(new RecordDTO { Date = date, VisitorId = visId, SurveyId = surveyId, OperatorId = operatorId });
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -130,7 +130,7 @@ public class InteractionsWithDBController : Controller
             await _facade.SurveyService.AddSurvey(new SurveyDTO { Title = title, Price = price });
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -143,7 +143,7 @@ public class InteractionsWithDBController : Controller
             await _facade.DoctorService.AddDoctor(new DoctorDTO { FullName = fullName, CabinetNumber = cabinetNumber, SurveyId = surveyId });
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -156,7 +156,7 @@ public class InteractionsWithDBController : Controller
             await _facade.CredentialService.AddCredential(new CredentialDTO { Login = login, Password = password, OperatorId = operatorId });
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -169,7 +169,7 @@ public class InteractionsWithDBController : Controller
             await _facade.OperatorService.AddOperator(new OperatorDTO { FirstName = firstName, LastName = lastName, FatherName = fatherName });
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -183,7 +183,7 @@ public class InteractionsWithDBController : Controller
             await _facade.VisitorService.EditVisitor(new VisitorDTO { FirstName = firstName, LastName = lastName, FatherName = fatherName, City = city, Gender = gender, BirthDate = birthDate, DateIssue = dateIssue, Nationality = nationality, PassportNumber = passportNumber, PassportSeries = passportSeries, PhotoBase64 = photoBase64 });
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -195,7 +195,7 @@ public class InteractionsWithDBController : Controller
         {
             await _facade.RecordService.EditRecord(new RecordDTO { Date = date, VisitorId = visId, SurveyId = surveyId, OperatorId = operatorId }); res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -208,7 +208,7 @@ public class InteractionsWithDBController : Controller
             await _facade.SurveyService.EditSurvey(new SurveyDTO { Title = title, Price = price });
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -247,7 +247,7 @@ public class InteractionsWithDBController : Controller
             await _facade.OperatorService.EditOperator(new OperatorDTO { FirstName = firstName, LastName = lastName, FatherName = fatherName });
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -260,7 +260,7 @@ public class InteractionsWithDBController : Controller
             await _facade.VisitorService.Remove(new VisitorDTO { PassportSeries = passportSeries, PassportNumber = passportNumber });
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -272,7 +272,7 @@ public class InteractionsWithDBController : Controller
         {
             await _facade.RecordService.RemoveRecord(new RecordDTO { Date = dateTime }); res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -285,7 +285,7 @@ public class InteractionsWithDBController : Controller
             await _facade.SurveyService.RemoveSurvey(new SurveyDTO { Title = title });
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -324,7 +324,7 @@ public class InteractionsWithDBController : Controller
             await _facade.OperatorService.RemoveOperator(new OperatorDTO { FirstName = firstName, LastName = lastName, FatherName = fatherName });
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 }
