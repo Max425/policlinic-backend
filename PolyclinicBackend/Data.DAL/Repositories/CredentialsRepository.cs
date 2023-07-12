@@ -1,4 +1,4 @@
-﻿using Data.DAL.DBExceptions;
+using Data.DAL.DBExceptions;
 using Data.DAL.Context;
 using Data.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -13,45 +13,47 @@ public class CredentialsRepository
         _db = polyclinicContext;
     }
 
-    public async Task AddCredential(string login, string password, int operatorId)
+    public async Task AddCredential(Credential credential)
     {
-        var credential = new Credential
-        {
-            Login = login,
-            Password = password,
-            OperatorId = operatorId
-        };
-        await _db.Credentials.AddAsync(credential);
+        var p = _db.Credentials.Where(p => p.Login == credential.Login).FirstOrDefault();
+        if (p != null)
+            throw new ObjectAlreadyExistsException();
+        await _db.AddAsync(credential);
         await _db.SaveChangesAsync();
     }
 
-    public async Task EditCredential(string login, string password, int operatorId)
+    public async Task EditCredential(Credential credential)
     {
-        var p = _db.Credentials.Where(p => p.Login == login).FirstOrDefault() ?? throw new ObjectNotFoundException();
-        
-        p.Login = login;
-        p.Password = password;
-        p.OperatorId = operatorId;
+        var p = _db.Credentials.Where(p => p.Id == credential.Id).FirstOrDefault() ?? throw new ObjectNotFoundException();;
 
+        p.Login = credential.Login;
+        p.Password = credential.Password;
+        p.Role = credential.Role;
+        p.OperatorId = credential.OperatorId;       
         await _db.SaveChangesAsync();
     }
 
-    public async Task RemoveCredential(string login)
+    public async Task RemoveCredential(Credential credential)
     {
-        var p = _db.Credentials.Where(p => p.Login == login).FirstOrDefault() ?? throw new ObjectNotFoundException();
+        var p = _db.Credentials.Where(p => p.Login == credential.Login).FirstOrDefault() ?? throw new ObjectNotFoundException();
         
         _db.Remove(p); 
         await _db.SaveChangesAsync(); 
     }
 
-    public async Task<List<Credential>> GetCredential()
+    public Credential GetCredential(Credential credential)
+    {
+        return _db.Credentials.Where(p => p.Login == credential.Login && p.Password == credential.Password).FirstOrDefault();
+    }
+    
+    public async Task<List<Credential>> GetCredentials()
     {
         return await _db.Credentials.ToListAsync();
     }
 
-    public bool CheckPassword(string login, string password)
+    public bool CheckPassword(Credential credential)
     {
-        var p = _db.Credentials.Where(p => p.Login == login).FirstOrDefault() ?? throw new ObjectNotFoundException();
-        return p.Login == login && p.Password == password ? true : false;
+        var p = _db.Credentials.Where(p => p.Login == credential.Login).FirstOrDefault() ?? throw new ObjectNotFoundException();
+        return p.Login == credential.Login && p.Password == credential.Password ? true : false;
     }
 }

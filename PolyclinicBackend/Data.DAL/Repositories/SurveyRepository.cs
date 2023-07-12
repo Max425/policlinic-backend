@@ -1,4 +1,4 @@
-﻿using Data.DAL.DBExceptions;
+using Data.DAL.DBExceptions;
 using Data.DAL.Context;
 using Data.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -14,34 +14,26 @@ public class SurveyRepository
         _db = polyclinicContext;
     }
 
-    public async Task AddSurvey(string title, int price)
+    public async Task AddSurvey(Survey survey)
     {
-        var p = _db.Surveys.Where(p => p.Title == title).FirstOrDefault();
+        var p = _db.Surveys.Where(p => p.Title == survey.Title).FirstOrDefault();
         if (p != null)
             throw new ObjectAlreadyExistsException();
-        
-        var survey = new Survey
-        {
-            Title = title,
-            Price = price
-        };
         await _db.Surveys.AddAsync(survey);
         await _db.SaveChangesAsync();
     }
 
-    public async Task EditSurvey(string title, int price)
+    public async Task EditSurvey(Survey survey)
     {
-        var p = _db.Surveys.Where(p => p.Title == title).FirstOrDefault() ?? throw new ObjectNotFoundException();
-        
-        p.Title = title;
-        p.Price = price;
+        var p = _db.Surveys.Where(p => p.Id == survey.Id).FirstOrDefault() ?? throw new ObjectNotFoundException();
+        p.Title = survey.Title;
+        p.Price = survey.Price;
         await _db.SaveChangesAsync();
     }
 
-    public async Task RemoveSurvey(string title)
+    public async Task RemoveSurvey(Survey survey)
     {
-        var p = _db.Surveys.Where(p => p.Title == title).FirstOrDefault() ?? throw new ObjectNotFoundException();
-        
+        var p = _db.Surveys.Where(p => p.Title == survey.Title).FirstOrDefault() ?? throw new ObjectNotFoundException();
         _db.Remove(p);
         await _db.SaveChangesAsync();
     }

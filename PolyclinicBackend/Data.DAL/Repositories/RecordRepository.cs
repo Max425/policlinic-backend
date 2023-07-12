@@ -1,4 +1,4 @@
-﻿using Data.DAL.DBExceptions;
+using Data.DAL.DBExceptions;
 using Data.DAL.Context;
 using Data.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -14,45 +14,33 @@ public class RecordRepository
         _db = polyclinicContext;
     }
 
-    public async Task AddRecord(DateTime dateTime, int visitorId, int surveyId, int operatorId)
+    public async Task AddRecord(Record record)
     {
-        var p = _db.Records.Where(p => p.Date == dateTime && p.SurveyId != 0).FirstOrDefault();
+        var p = _db.Records.Where(p => p.DateTime == record.DateTime && p.SurveyId == record.VisitorId).FirstOrDefault();
         if (p != null)
             throw new ObjectAlreadyExistsException();
-            
-        var record = new Record
-        {
-            VisitorId = visitorId,
-            SurveyId = surveyId,
-            Date = dateTime,
-            OperatorId = operatorId
-        };
         await _db.Records.AddAsync(record);
         await _db.SaveChangesAsync();
     }
 
-    public async Task EditRecord(DateTime dateTime, int visitorId, int surveyId, int operatorId)
+    public async Task EditRecord(Record record)
     {
-        var p = _db.Records.Where(p => p.Date == dateTime && p.SurveyId != 0).FirstOrDefault() 
-            ?? throw new ObjectNotFoundException();
-            
-        p.VisitorId = visitorId;
-        p.SurveyId = surveyId;
-        p.Date = dateTime;
-        p.OperatorId = operatorId;
+        var p = _db.Records.Where(p => p.Id == record.Id).FirstOrDefault() ?? throw new ObjectNotFoundException();
+        p.VisitorId = record.VisitorId;
+        p.SurveyId = record.SurveyId;
+        p.DateTime = record.DateTime;
+        p.OperatorId = record.OperatorId;
         await _db.SaveChangesAsync();
     }
 
-    public async Task RemoveRecord(DateTime dateTime)
+    public async Task RemoveRecord(Record record)
     {
-        var p = _db.Records.Where(p => p.Date == dateTime && p.SurveyId != 0).FirstOrDefault() 
-            ?? throw new ObjectNotFoundException();
-            
-        _db.Remove(p);
-        await _db.SaveChangesAsync();
+        var p = _db.Records.Where(p => p.DateTime == record.DateTime && p.SurveyId == record.VisitorId).FirstOrDefault() ?? throw new ObjectNotFoundException();
+    _db.Remove(p);
+    await _db.SaveChangesAsync();
     }
 
-    public async Task<List<Record>> GetRecord()
+    public async Task<List<Record>> GetRecords()
     {
         return await _db.Records.ToListAsync();
     }

@@ -1,4 +1,4 @@
-﻿using Data.DAL.DBExceptions;
+using Data.DAL.DBExceptions;
 using Data.DAL.Context;
 using Data.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -14,36 +14,28 @@ public class OperatorRepository
         _db = polyclinicContext;
     }
 
-    public async Task AddOperator(string firstName, string lastName, string FatherName)
+    public async Task AddOperator(Operator oper)
     {
-        var p = new Operator
-        {
-            FirstName = firstName,
-            LastName = lastName,
-            FatherName = FatherName
-        };
-
-        await _db.Operators.AddAsync(p);
+        var p = _db.Operators.Where(p => p.FirstName == oper.FirstName && p.LastName == oper.LastName && p.FatherName == oper.FatherName).FirstOrDefault();
+        if (p != null)
+            throw new ObjectAlreadyExistsException();
+        await _db.AddAsync(oper);
         await _db.SaveChangesAsync();
     }
 
-    public async Task EditOperator(string firstName, string lastName, string fatherName)
+    public async Task EditOperator(Operator oper)
     {
-        var p = _db.Operators.Where(p => p.FirstName == firstName && p.LastName == lastName && 
-                            p.FatherName == fatherName).FirstOrDefault() ?? throw new ObjectNotFoundException();
-        
-        p.FirstName = firstName;
-        p.LastName = lastName;
-        p.FatherName = fatherName;
+        var p = _db.Operators.Where(p => p.Id == oper.Id).FirstOrDefault() ?? throw new ObjectNotFoundException();
+        p.FirstName = oper.FirstName;
+        p.LastName = oper.LastName;
+        p.FatherName = oper.FatherName;
 
         await _db.SaveChangesAsync();
     }
 
-    public async Task RemoveOperator(string firstName, string lastName, string fatherName)
+    public async Task RemoveOperator(Operator oper)
     {
-        var p = _db.Operators.Where(p => p.FirstName == firstName && p.LastName == lastName && 
-                            p.FatherName == fatherName).FirstOrDefault() ?? throw new ObjectNotFoundException();
-        
+        var p = _db.Operators.Where(p => p.FirstName == oper.FirstName && p.LastName == oper.LastName && p.FatherName == oper.FatherName).FirstOrDefault() ?? throw new ObjectNotFoundException();
         _db.Remove(p);
         await _db.SaveChangesAsync();
     }

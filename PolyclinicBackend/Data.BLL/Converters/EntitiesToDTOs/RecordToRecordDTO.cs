@@ -9,7 +9,7 @@ public class RecordToRecordDTO
     {
         var DTO = new RecordDTO
         {
-            Date = record.Date,
+            Date = record.DateTime,
             Id = record.Id,
             SurveyId = record.SurveyId,
             VisitorId = record.VisitorId,
