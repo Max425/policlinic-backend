@@ -8,7 +8,7 @@ using (var dbContext = new GeneratedContext())
 {
     // Удаление существующих записей из таблицы
     dbContext.Database.ExecuteSqlRaw("TRUNCATE TABLE public.\"VisitorGenerated\" RESTART IDENTITY");
-    List<string> patronymics = File.ReadAllLines("C:\\Users\\max42\\OneDrive\\Рабочий стол\\test\\analytics\\rus_midname.txt").ToList();
+    List<string> patronymics = File.ReadAllLines("..\\..\\..\\rus_midname.txt").ToList();
     // Генерация случайных данных
     var faker = new Faker<Visitor>("ru")
         .RuleFor(p => p.FirstName, f => f.Name.FirstName())
