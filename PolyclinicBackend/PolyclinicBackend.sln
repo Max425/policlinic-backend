@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.DAL", "Data.DAL\Data.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PythonService", "PythonService\PythonService.csproj", "{56BD7EE1-DD5A-4616-8B29-981D718DEEB3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisitorsGenerated", "VisitorsGenerated\VisitorsGenerated.csproj", "{27A324CD-6B4A-4658-811E-600F5EC90A9B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{56BD7EE1-DD5A-4616-8B29-981D718DEEB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56BD7EE1-DD5A-4616-8B29-981D718DEEB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56BD7EE1-DD5A-4616-8B29-981D718DEEB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27A324CD-6B4A-4658-811E-600F5EC90A9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27A324CD-6B4A-4658-811E-600F5EC90A9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27A324CD-6B4A-4658-811E-600F5EC90A9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27A324CD-6B4A-4658-811E-600F5EC90A9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -13,10 +13,6 @@ public class PolyclinicContext : DbContext
     public DbSet<Credential> Credentials { get; set; }
     public DbSet<Operator> Operators { get; set; }
 
-    public PolyclinicContext()
-    {
-        Database.EnsureCreated();
-    }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
