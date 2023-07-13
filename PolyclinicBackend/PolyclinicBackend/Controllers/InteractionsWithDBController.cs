@@ -21,7 +21,7 @@ public class InteractionsWithDBController : Controller
         _facade = facade;
     }
 
-
+    [Authorize(Roles = "Admin")]
     [HttpGet("GetVisitors")]
     public async Task<IActionResult> GetVisitors()
     {
@@ -174,13 +174,13 @@ public class InteractionsWithDBController : Controller
     }
 
     [HttpPut("EditVisitor")]
-    public async Task<IActionResult> EditVisitor(string firstName, string lastName, string fatherName, string city, string gender,
+    public async Task<IActionResult> EditVisitor(int id, string firstName, string lastName, string fatherName, string city, string gender,
         DateTime birthDate, string nationality, int passportSeries, string photoBase64, int passportNumber, DateTime dateIssue)
     {
         IActionResult res;
         try
         {
-            await _facade.VisitorService.EditVisitor(new VisitorDTO { FirstName = firstName, LastName = lastName, FatherName = fatherName, City = city, Gender = gender, BirthDate = birthDate, DateIssue = dateIssue, Nationality = nationality, PassportNumber = passportNumber, PassportSeries = passportSeries, PhotoBase64 = photoBase64 });
+            await _facade.VisitorService.EditVisitor(new VisitorDTO { Id = id, FirstName = firstName, LastName = lastName, FatherName = fatherName, City = city, Gender = gender, BirthDate = birthDate, DateIssue = dateIssue, Nationality = nationality, PassportNumber = passportNumber, PassportSeries = passportSeries, PhotoBase64 = photoBase64 });
             res = Ok();
         }
         catch (Exception ex) { res = BadRequest(ex.Message); }

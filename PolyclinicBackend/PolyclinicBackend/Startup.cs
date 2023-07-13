@@ -56,11 +56,39 @@ public class Startup
                 Title = "Login",
                 Version = "v2"
             });
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Description = "Here Enter JWT Token with bearer format like bearer[space] token"
+            });
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                   new OpenApiSecurityScheme
+                   {
+                       Reference = new OpenApiReference
+                       {
+                           Type = ReferenceType.SecurityScheme,
+                           Id = "Bearer"
+                       }
+                   },
+                   new string[]{}
+                }
+            });
         });
 
         services.AddDbContext<PolyclinicContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DataConnection")));
 
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
         .AddJwtBearer(options =>
         {
             options.RequireHttpsMetadata = false;
