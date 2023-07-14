@@ -1,26 +1,11 @@
 ﻿using Data.DAL.Context;
 using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Data.DAL.Repositories;
-using Data.DAL.Entities;
-using Microsoft.AspNetCore.Identity;
 using Data.BLL.Service;
-using Data.BLL.DTO;
-using Data.DAL;
 using Data.BLL.Facade;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authorization;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.AspNetCore.Builder;
-using System;
-using Microsoft.AspNetCore.Authentication;
+using Data.BLL.Services;
 
 namespace PolyclinicBackend;
 
@@ -59,6 +44,7 @@ public class Startup
         });
 
         services.AddDbContext<PolyclinicContext>();
+        services.AddDbContext<GeneratedContext>();
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
@@ -84,6 +70,7 @@ public class Startup
         services.AddTransient<DoctorRepository>();
         services.AddTransient<CredentialsRepository>();
         services.AddTransient<OperatorRepository>();
+        services.AddTransient<VisitorGeneratedRepository>();
 
         services.AddTransient<CredentialService>();
         services.AddTransient<DoctorService>();
@@ -91,6 +78,7 @@ public class Startup
         services.AddTransient<RecordService>();
         services.AddTransient<VisitorService>();
         services.AddTransient<SurveyService>();
+        //services.AddHostedService<BackgroundWorkerService>();
 
         services.AddTransient<Facade>();
 

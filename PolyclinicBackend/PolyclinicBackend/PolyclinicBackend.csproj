@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Data.BLL\Data.BLL.csproj" />
     <ProjectReference Include="..\Data.DAL\Data.DAL.csproj" />
+    <ProjectReference Include="..\VisitorsGenerated\VisitorsGenerated.csproj" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

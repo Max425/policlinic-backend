@@ -47,8 +47,11 @@ public class VisitorGeneratedRepository
         await _db.SaveChangesAsync();
     }
 
-    public async Task<List<Visitor>> GetVisitorGenerated()
+    public async Task<List<Visitor>> GetVisitorGenerated(int batchSize, int skipCount)
     {
-        return await _db.VisitorGenerated.ToListAsync();
+        return await _db.VisitorGenerated
+            .Skip(skipCount)
+            .Take(batchSize)
+            .ToListAsync();
     }
 }
