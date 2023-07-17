@@ -8,11 +8,6 @@ namespace PolyclinicBackend.Controllers
     [ApiExplorerSettings(GroupName = "Admin")]
     public class ValuesController : Controller
     {
-        [Authorize(Roles = "admin")]
-        [Route("getrole")]
-        public IActionResult GetRole()
-        {
-            return Ok("Ваша роль: администратор");
-        }
+
     }
 }
