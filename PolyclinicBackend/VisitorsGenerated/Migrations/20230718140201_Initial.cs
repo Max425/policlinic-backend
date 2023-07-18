@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace VisitorsGenerated.Migrations
+namespace VisitorGenerated.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -13,7 +13,7 @@ namespace VisitorsGenerated.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "VisitorGenerated",
+                name: "VisitorsGenerated",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -32,7 +32,7 @@ namespace VisitorsGenerated.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_VisitorGenerated", x => x.Id);
+                    table.PrimaryKey("PK_VisitorsGenerated", x => x.Id);
                 });
         }
 
@@ -40,7 +40,7 @@ namespace VisitorsGenerated.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "VisitorGenerated");
+                name: "VisitorsGenerated");
         }
     }
 }

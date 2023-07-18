@@ -6,11 +6,11 @@ namespace Data.DAL.Context;
 
 public class GeneratedContext : DbContext
 {
-    public DbSet<Visitor> VisitorGenerated { get; set; }
+    public DbSet<Visitor> VisitorsGenerated { get; set; }
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=generated;Username=postgres;Password=1474"); // TODO: сюда нужно конфиг прокинуть
+        optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=VisitorGenerated;Username=postgres;Password=1474"); // TODO: сюда нужно конфиг прокинуть
     }
 }

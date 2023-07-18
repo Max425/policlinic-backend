@@ -3,24 +3,21 @@ using System;
 using Data.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace VisitorsGenerated.Migrations
+namespace VisitorGenerated.Migrations
 {
     [DbContext(typeof(GeneratedContext))]
-    [Migration("20230712002411_Initial")]
-    partial class Initial
+    partial class GeneratedContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.9")
+                .HasAnnotation("ProductVersion", "7.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -75,7 +72,7 @@ namespace VisitorsGenerated.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("VisitorGenerated");
+                    b.ToTable("VisitorsGenerated");
                 });
 #pragma warning restore 612, 618
         }

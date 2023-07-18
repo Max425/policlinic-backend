@@ -1,13 +1,12 @@
-﻿using Bogus;
+﻿/*using Bogus;
 using Data.DAL.Context;
 using Data.DAL.Entities;
-using Microsoft.EntityFrameworkCore;
 
 
 using (var dbContext = new GeneratedContext())
 {
     // Удаление существующих записей из таблицы
-    dbContext.Database.ExecuteSqlRaw("TRUNCATE TABLE public.\"VisitorGenerated\" RESTART IDENTITY");
+    //dbContext.Database.ExecuteSqlRaw("TRUNCATE TABLE public.\"VisitorGenerated\" RESTART IDENTITY");
     List<string> patronymics = File.ReadAllLines("..\\..\\..\\rus_midname.txt").ToList();
     // Генерация случайных данных
     var faker = new Faker<Visitor>("ru")
@@ -25,8 +24,15 @@ using (var dbContext = new GeneratedContext())
 
     // Генерация 100 записей и добавление их в базу данных
     var visitors = faker.Generate(1000);
-    dbContext.VisitorGenerated.AddRange(visitors);
+    dbContext.VisitorsGenerated.AddRange(visitors);
     dbContext.SaveChanges();
 
     Console.WriteLine("Данные успешно добавлены в базу данных.");
-}
+}*/
+
+using Data.DAL.Entities;
+
+string cmd = "C:/Python311/python.exe";
+string arg = "D:/учёба/qoollo-practice/backend/PolyclinicBackend/PythonService/code.py D:/passport.jpg false";
+Visitor visitor = PythonService.PythonService.GetDataFromPhoto(cmd, arg);
+Console.WriteLine(visitor.Gender);
