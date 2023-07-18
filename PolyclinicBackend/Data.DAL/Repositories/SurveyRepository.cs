@@ -2,6 +2,7 @@ using Data.DAL.DBExceptions;
 using Data.DAL.Context;
 using Data.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Data.DAL.Repositories;
 
@@ -41,5 +42,9 @@ public class SurveyRepository
     public async Task<List<Survey>> GetSurveys()
     {
         return await _db.Surveys.ToListAsync();
+    }
+    public async Task<Survey> GetSurveyById(int id)
+    {
+        return await _db.Surveys.FirstOrDefaultAsync(p => p.Id == id) ?? throw new ObjectNotFoundException();
     }
 }

@@ -41,5 +41,10 @@ namespace Data.BLL.Service
         {
             return await _recordRepository.GetRecords();
         }
+
+        public async Task<List<Record>> GetRecordsByVisitorId(int id)
+        {
+            return await _recordRepository.GetRecordsByVisitorId(id);
+        }
     }
 }

@@ -41,5 +41,10 @@ namespace Data.BLL.Service
         {
             return await _surveyRepository.GetSurveys();
         }
+
+        public async Task<Survey> GetSurveyById(int id)
+        {
+            return await _surveyRepository.GetSurveyById(id);
+        }
     }
 }

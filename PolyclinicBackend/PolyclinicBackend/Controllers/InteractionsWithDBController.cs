@@ -31,7 +31,7 @@ public class InteractionsWithDBController : Controller
         {
             res = Ok(await _facade.VisitorService.GetVisitors());
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -43,7 +43,19 @@ public class InteractionsWithDBController : Controller
         {
             res = Ok(await _facade.RecordService.GetRecords());
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
+        return res;
+    }
+
+    [HttpGet("GetRecordsByVisitorId/{id}")]
+    public async Task<IActionResult> GetRecordsByVisitorId(int id)
+    {
+        IActionResult res;
+        try
+        {
+            res = Ok(await _facade.RecordService.GetRecordsByVisitorId(id));
+        }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -55,9 +67,22 @@ public class InteractionsWithDBController : Controller
         {
             res = Ok(await _facade.SurveyService.GetSurveys());
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
+
+    [HttpGet("GetSurveyById/{id}")]
+    public async Task<IActionResult> GetSurveyById(int id)
+    {
+        IActionResult res;
+        try
+        {
+            res = Ok(await _facade.SurveyService.GetSurveyById(id));
+        }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
+        return res;
+    }
+
 
     [HttpGet("GetDoctor")]
     public async Task<IActionResult> GetDoctors()
@@ -67,7 +92,7 @@ public class InteractionsWithDBController : Controller
         {
             res = Ok(await _facade.DoctorService.GetDoctors());
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -79,7 +104,7 @@ public class InteractionsWithDBController : Controller
         {
             res = Ok(await _facade.CredentialService.GetCredentials());
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -91,7 +116,7 @@ public class InteractionsWithDBController : Controller
         {
             res = Ok(await _facade.OperatorService.GetOperators());
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -222,7 +247,7 @@ public class InteractionsWithDBController : Controller
             await _facade.DoctorService.EditDoctor(new DoctorDTO { FullName = fullName, CabinetNumber = cabinetNumber, SurveyId = surveyId });
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -235,7 +260,7 @@ public class InteractionsWithDBController : Controller
             await _facade.CredentialService.EditCredential(new CredentialDTO { Login = login, Password = password, OperatorId = operatorId });
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -299,7 +324,7 @@ public class InteractionsWithDBController : Controller
             await _facade.DoctorService.RemoveDoctor(new DoctorDTO { FullName = fullName, CabinetNumber = cabinetNumber, SurveyId = surveyId });
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 
@@ -312,7 +337,7 @@ public class InteractionsWithDBController : Controller
             await _facade.CredentialService.RemoveCredential(new CredentialDTO { Login = login });
             res = Ok();
         }
-        catch (Exception ex) { res = BadRequest(ex.Message); }
+        catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
 

@@ -44,4 +44,9 @@ public class RecordRepository
     {
         return await _db.Records.ToListAsync();
     }
+
+    public async Task<List<Record>> GetRecordsByVisitorId(int id)
+    {
+        return await _db.Records.Where(p => p.VisitorId == id).ToListAsync();
+    }
 }
