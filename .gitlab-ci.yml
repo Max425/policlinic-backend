@@ -1,3 +1,10 @@
+image: mcr.microsoft.com/dotnet/core/sdk:3.1
+
+before_script:
+  - $PSVersionTable.PSVersion
+  - dotnet --version
+  - nuget help | select-string Version
+
 stages:
   - build
   - test
@@ -7,7 +14,7 @@ stages:
 build:
   stage: build
   script:
-    - # Команды для сборки вашего C# проекта
+    - dotnet build -c Release
 
 test:
   stage: test
