@@ -9,4 +9,8 @@ public class ObjectNotFoundException : DBException
     public ObjectNotFoundException(string message) : base(message)
     {
     }
+
+    public ObjectNotFoundException(Exception ex, string message) : base(ex, message)
+    {
+    }
 }
