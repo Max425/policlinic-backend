@@ -114,7 +114,7 @@ public class Startup
 
         services.AddAuthentication();
         services.AddAuthorization();
-        var bs = new BackgroundWorkerService(services.BuildServiceProvider());
+        //var bs = new BackgroundWorkerService(services.BuildServiceProvider());
 
     }
 
