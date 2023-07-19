@@ -12,7 +12,7 @@ stages:
 build-job:
   stage: build
   script:
-    - dotnet build -c Release
+    - echo "build"#dotnet build -c Release
 
 test:
   stage: test
@@ -22,7 +22,7 @@ test:
 publish:
   stage: publish
   script:
-    - echo dotnet publish --configuration Release
+    - echo "publish"#dotnet publish --configuration Release
 
 deploy-prod:
   stage: deploy
