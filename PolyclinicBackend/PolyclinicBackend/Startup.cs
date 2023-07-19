@@ -65,7 +65,6 @@ public class Startup
                 }
             });
         });
-
         services.AddDbContext<PolyclinicContext>();
         services.AddDbContext<GeneratedContext>();
 
@@ -115,6 +114,8 @@ public class Startup
 
         services.AddAuthentication();
         services.AddAuthorization();
+        var bs = new BackgroundWorkerService(services.BuildServiceProvider());
+
     }
 
     public void Configure(IApplicationBuilder app)
