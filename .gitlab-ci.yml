@@ -1,30 +1,30 @@
-image: mcr.microsoft.com/dotnet/core/sdk:3.1
+# image: mcr.microsoft.com/dotnet/core/sdk:3.1
 
-before_script:
-  - dotnet --version
+# before_script:
+#   - dotnet --version
 
-stages:
-  - build
-  - test
-  - publish
-  - deploy
+# stages:
+#   - build
+#   - test
+#   - publish
+#   - deploy
 
-build-job:
-  stage: build
-  script:
-    - echo "build"#dotnet build -c Release
+# build-job:
+#   stage: build
+#   script:
+#     - dotnet build -c Release
 
-test:
-  stage: test
-  script:
-    - echo "test"
+# test:
+#   stage: test
+#   script:
+#     - echo "test"
 
-publish:
-  stage: publish
-  script:
-    - echo "publish"#dotnet publish --configuration Release
+# publish:
+#   stage: publish
+#   script:
+#     - dotnet publish --configuration Release
 
-deploy-prod:
-  stage: deploy
-  script:
-    - echo "deploy"
+# deploy-prod:
+#   stage: deploy
+#   script:
+#     - echo "deploy"
