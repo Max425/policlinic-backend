@@ -1,4 +1,5 @@
 ﻿using Data.BLL.Converters.DTOsToEntities;
+using Data.BLL.Converters.EntitiesToDTOs;
 using Data.BLL.DTO;
 using Data.DAL.Entities;
 using Data.DAL.Repositories;
@@ -42,9 +43,11 @@ namespace Data.BLL.Service
             return await _recordRepository.GetRecords();
         }
 
-        public async Task<List<Record>> GetRecordsByVisitorId(int id)
+        public async Task<List<RecordDTO>> GetRecordsByVisitorId(int id)
         {
-            return await _recordRepository.GetRecordsByVisitorId(id);
+            List<Record> records = await _recordRepository.GetRecordsByVisitorId(id);
+            List<RecordDTO> recordDTOs = records.ConvertAll(record => RecordToRecordDTO.Convert(record));
+            return recordDTOs;
         }
     }
 }
