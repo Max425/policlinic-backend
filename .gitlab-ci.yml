@@ -1,10 +1,6 @@
+image: mcr.microsoft.com/dotnet/core/sdk:3.1
+
 before_script:
-  - export DOTNET_VERSION=5.0.400 # Здесь можно указать желаемую версию .NET SDK
-  - export DOTNET_INSTALL_DIR="/usr/share/dotnet"
-  - mkdir -p "$DOTNET_INSTALL_DIR"
-  - wget -q -O dotnet.tar.gz https://dotnetcli.azureedge.net/dotnet/5.0.400/dotnet-sdk-5.0.400-linux-x64.tar.gz # Замените SKU_VERSION на желаемую версию (например, 5.0.400)
-  - tar -zxf dotnet.tar.gz -C "$DOTNET_INSTALL_DIR"
-  - export PATH="$DOTNET_INSTALL_DIR:$PATH"
   - dotnet --version
 
 stages:
@@ -16,7 +12,7 @@ stages:
 build-job:
   stage: build
   script:
-    - dotnet build
+    - dotnet build -c Release
 
 test:
   stage: test
