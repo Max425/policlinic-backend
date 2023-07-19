@@ -115,6 +115,18 @@ public class Startup
         services.AddAuthentication();
         services.AddAuthorization();
         //var bs = new BackgroundWorkerService(services.BuildServiceProvider());
+        services.AddCors(options =>
+        {
+            options.AddPolicy("_myAllowSpecificOrigins",
+                              builder =>
+                              {
+                                  builder.WithOrigins("http://localhost:4200",
+                                                      "http://localhost:4200/login")
+                                         .AllowAnyHeader()
+                                         .AllowAnyMethod();
+                              });
+        });
+
 
     }
 
@@ -127,6 +139,7 @@ public class Startup
             c.SwaggerEndpoint("/swagger/Admin/swagger.json", "Admin");
             c.SwaggerEndpoint("/swagger/Login/swagger.json", "Login");
         });
+        app.UseCors("_myAllowSpecificOrigins");
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
