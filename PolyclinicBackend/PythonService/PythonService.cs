@@ -1,26 +1,27 @@
-﻿using IronPython.Hosting;
-using Microsoft.Scripting.Hosting;
+﻿using System.Diagnostics;
+using System.Text;
+using Newtonsoft.Json;
+using Data.DAL.Entities;
 
+namespace PythonService;
 
-namespace PythonServiceWorker
+public class PythonService
 {
-    public static class PythonService
+    public static Visitor GetDataFromPhoto(string cmd, string args)
     {
-        private static readonly ScriptEngine engine;
-        private static readonly ScriptScope scope;
-
-        static PythonService()
+        ProcessStartInfo start = new()
         {
-            engine = Python.CreateEngine();
-            scope = engine.CreateScope();
-        }
+            FileName = cmd,
+            Arguments = args,
+            StandardOutputEncoding = Encoding.UTF8,
+            UseShellExecute = false,
+            RedirectStandardOutput = true
+        };
 
-        public static dynamic GetDataFromPhoto(string photoBase64)
-        {
-            scope.SetVariable("photo", photoBase64);
-            engine.ExecuteFile(".../code.py", scope);
-            return scope.GetVariable("data");
-        }
+        using Process process = Process.Start(start);
+        string result = process.StandardOutput.ReadToEnd();
+        Console.WriteLine(result);
+        Visitor visitor = JsonConvert.DeserializeObject<Visitor>(result);
+        return visitor;
     }
-
 }

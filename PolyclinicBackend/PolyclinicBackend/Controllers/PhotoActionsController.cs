@@ -1,7 +1,6 @@
 ﻿using Data.BLL.Facade;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PythonServiceWorker;
 
 namespace PolyclinicBackend.Controllers
 {
