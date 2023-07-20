@@ -3,7 +3,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Data.DAL.Entities;
 
-namespace PythonService;
+namespace PythonServiceWork;
 
 public class PythonService
 {
