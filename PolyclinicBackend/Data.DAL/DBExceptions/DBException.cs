@@ -9,4 +9,8 @@ public class DBException : Exception
     public DBException(string message) : base(message)
     {
     }
+
+    public DBException(Exception ex, string message) : base(message, ex)
+    {
+    }
 }

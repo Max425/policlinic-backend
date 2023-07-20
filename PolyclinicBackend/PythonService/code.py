@@ -1,4 +1,6 @@
-﻿import imutils
+﻿import sys
+sys.stdout.reconfigure(encoding='utf-8')
+import imutils
 from imutils.contours import sort_contours
 import numpy as np
 import pytesseract
@@ -12,6 +14,7 @@ import csv
 import difflib
 import threading
 import json
+from queue import Queue
 
 rus = ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф',
        'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я']
@@ -71,7 +74,7 @@ def change(img):
     photo = img[y:pY, x:pX]
     return photo
 
-def read_ph(photo):
+def read_ph(photo, imagePathForAns):
     image = photo
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     (H, W) = gray.shape
@@ -80,18 +83,23 @@ def read_ph(photo):
     gray = cv2.GaussianBlur(gray, (3, 3), 0)
     blackhat = cv2.morphologyEx(gray, cv2.MORPH_BLACKHAT, rectKernel)
     bn = blackhat
+    #cv2.imshow('resu', bn)
+    #cv2.waitKey(5000)
     config = (" --oem 3 --psm 6 -c tessedit_char_whitelist=0123456789><")
-    mrzText = pytesseract.image_to_string(bn, lang='rus', config=config)
-    mrzText = mrzText.split()
+    dataText = pytesseract.image_to_string(image, lang='rus', config=config)
+    dataText = dataText.split()
     i = True  # переменная для остановки
     u = 0
     while (i):
-        if (len(mrzText[u]) == 8):
+        if (len(dataText[u]) == 8):
             i = False
-            data_vyd = mrzText[u][0:2] + '.' + mrzText[u][2:4] + '.' + mrzText[u][4:8]
-        if (len(mrzText[u]) == 2 and len(mrzText[u + 1]) == 2 and len(mrzText[u + 2]) == 4):
+            data_vyd = dataText[u][0:2] + '.' + dataText[u][2:4] + '.' + dataText[u][4:8]
+        if (len(dataText[u]) == 2 and len(dataText[u + 1]) == 2 and len(dataText[u + 2]) == 4):
             i = False
-            data_vyd = mrzText[u] + '.' + mrzText[u + 1] + '.' + mrzText[u + 2]
+            data_vyd = dataText[u] + '.' + dataText[u + 1] + '.' + dataText[u + 2]
+        if (len(dataText[u]) == 4 and len(dataText[u + 1]) == 4):
+            i = False
+            data_vyd = dataText[u][0:2] + '.' + dataText[u][2:4] + '.' + dataText[u+1][0:4]
         u = u + 1
     grad = cv2.Sobel(blackhat, ddepth=cv2.CV_32F, dx=1, dy=0, ksize=-1)
     grad = np.absolute(grad)
@@ -205,20 +213,24 @@ def read_ph(photo):
     else:
         data = '20' + data
     data = data[6:8] + '.' + data[4:6] + '.' + data[0:4]
+    if (int(data_vyd[6:10]) - int(data[6:10])<14):
+        error = "False"
+    else:
+        error = "True"
     global pasdata
-    pasdata = {"Surname": surname, "Name": name, "Mid": otch, "Gender": gend, "Place": place, "Data vydach": data_vyd, "Date": data, "Series": seria, "Number": nomer}
+    pasdata = {"LastName": surname, "FirstName": name, "FatherName": otch, "Gender": gend, "City": place, "DateIssue": data_vyd, "BirthDate": data, "PassportSeries": seria, "PassportNumber": nomer, "PhotoBase64": imagePathForAns, "Nationality": "RU"}    
     json_data = json.dumps(pasdata, ensure_ascii=False)
     print(json_data)
     answer = []
     answer.append(surname)
     answer.append(name)
     answer.append(otch)
-    return answer
+    return [answer, error]
 
 def result(image):
     try:
         photo = change(image)
-        ans = read_ph(photo)
+        ans = read_ph(photo, image)
         return ans
     except ValueError:
         photo = cv2.imread(image)
@@ -252,7 +264,7 @@ def damerau_levenshtein_distance(word1, word2):
 
     return matrix[len1][len2]
 
-def search(dict, word, atr):
+def search(dict, word, atr, result_queue):
     with open(dict, 'r') as file:
         reader = csv.reader(file)
         dictionary = list(reader)
@@ -270,36 +282,42 @@ def search(dict, word, atr):
 
     # Выводим результаты
     if found:
-        print(f'"{atr}" "{word}" есть в словаре')
+        res1 = {"suggestion": word, "distance": 0}
+        result_queue.put(res1)
+        #print(f'"{atr}" "{word}" есть в словаре')
     else:
         if similar_words:
-            print(f'{atr} "{word}" не найдено в словаре, но есть похожие на него:')
-        else:
-            print(f'{atr} "{word}" и похожие на него не найдены в словаре')
+            spisok = []
+            for entry in similar_words:
+                distance = damerau_levenshtein_distance(word, entry)
+                record = (entry, distance)
+                spisok.append(record)
+            spisok.sort(key=lambda x: x[1])
+            records = []
+            for element in spisok[0:15]:
+                data_a = {"suggestion": element[0], "distance": element[1]}
+                records.append(data_a)
+            result_queue.put(records)
 
-    if (len(similar_words)!=0):
-        spisok = []
-        for entry in similar_words:
-            distance = damerau_levenshtein_distance(word, entry)
-            record = (entry, distance)
-            spisok.append(record)
-        spisok.sort(key=lambda x: x[1])
-        records = []
-        for element in spisok[0:15]:
-            data_a = {"Предполагаемое слово": element[0], "Расстояние Левенштейна": element[1]}
-            records.append(data_a)
-        json_data2 = json.dumps(records, ensure_ascii=False, indent=4)
-        print(json_data2)
+
+        else:
+            res2 = {"suggestion": word, "distance": -1}
+            result_queue.put(res2)
+            # print(f'{atr} "{word}" и похожие на него не найдены в словаре')
 
 def main():
     image_path = sys.argv[1]
     validate = sys.argv[2]
     answ = result(image_path)
     if validate == "True" or validate == "true":
+        result_queue1 = Queue()
+        result_queue2 = Queue()
+        result_queue3 = Queue()
+
         # Создаем потоки для поиска слова в каждом словаре
-        thread1 = threading.Thread(target=search, args=("rus_surnames.csv", answ[0], 'Фамилия'))
-        thread2 = threading.Thread(target=search, args=("rus_names.csv", answ[1], 'Имя'))
-        thread3 = threading.Thread(target=search, args=("rus_midname.csv", answ[2], 'Отчество'))
+        thread1 = threading.Thread(target=search, args=("rus_surnames.csv", answ[0][0], 'surname', result_queue1))
+        thread2 = threading.Thread(target=search, args=("rus_names.csv", answ[0][1], 'name', result_queue2))
+        thread3 = threading.Thread(target=search, args=("rus_midname.csv", answ[0][2], 'patronym', result_queue3))
 
         # Запускаем потоки
         thread1.start()
@@ -310,6 +328,13 @@ def main():
         thread1.join()
         thread2.join()
         thread3.join()
+
+        result1 = result_queue1.get()
+        result2 = result_queue2.get()
+        result3 = result_queue3.get()
+
+        merged_data = {"surname": result1, "name": result2, "patronym": result3, "date_matches": answ[1]}
+        print(merged_data)
 
 if __name__ == "__main__":
     main()

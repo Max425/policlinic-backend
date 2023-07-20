@@ -9,4 +9,7 @@ public class ObjectAlreadyExistsException : DBException
     public ObjectAlreadyExistsException(string message) : base(message)
     {
     }
+    public ObjectAlreadyExistsException(Exception ex, string message) : base(ex, message)
+    {
+    }
 }

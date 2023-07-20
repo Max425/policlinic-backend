@@ -16,16 +16,16 @@ public class VisitorGeneratedRepository
 
     public async Task AddVisitor(Visitor visitor)
     {
-        var p = _db.VisitorGenerated.Where(q => q.PassportSeries == visitor.PassportSeries && q.PassportNumber == visitor.PassportNumber).FirstOrDefault();
-        if (p != null)
+        var p = _db.VisitorsGenerated.Where(q => q.PassportSeries == visitor.PassportSeries && q.PassportNumber == visitor.PassportNumber).FirstOrDefault();
+        if(p != null)
             throw new ObjectAlreadyExistsException();
-        await _db.VisitorGenerated.AddAsync(visitor);
+        await _db.VisitorsGenerated.AddAsync(visitor);
         await _db.SaveChangesAsync();
     }
 
     public async Task EditVisitor(Visitor visitor)
     {
-        var p = _db.VisitorGenerated.Where(q => q.Id == visitor.Id).FirstOrDefault() ?? throw new ObjectNotFoundException();
+        var p = _db.VisitorsGenerated.Where(q => q.Id == visitor.Id).FirstOrDefault() ?? throw new ObjectNotFoundException();
         p.FirstName = visitor.FirstName;
         p.LastName = visitor.LastName;
         p.FatherName = visitor.FatherName;
@@ -42,14 +42,14 @@ public class VisitorGeneratedRepository
 
     public async Task Remove(Visitor visitor)
     {
-        var p = _db.VisitorGenerated.Where(q => q.PassportSeries == visitor.PassportSeries && q.PassportNumber == visitor.PassportNumber).FirstOrDefault() ?? throw new ObjectNotFoundException();
-        _db.VisitorGenerated.Remove(p);
+        var p = _db.VisitorsGenerated.Where(q => q.PassportSeries == visitor.PassportSeries && q.PassportNumber == visitor.PassportNumber).FirstOrDefault() ?? throw new ObjectNotFoundException();
+        _db.VisitorsGenerated.Remove(p);     
         await _db.SaveChangesAsync();
     }
 
     public async Task<List<Visitor>> GetVisitorGenerated(int batchSize, int skipCount)
     {
-        return await _db.VisitorGenerated
+        return await _db.VisitorsGenerated
             .Skip(skipCount)
             .Take(batchSize)
             .ToListAsync();

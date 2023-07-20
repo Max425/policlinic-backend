@@ -17,7 +17,6 @@ public class PythonService
             UseShellExecute = false,
             RedirectStandardOutput = true
         };
-
         using Process process = Process.Start(start);
         string result = process.StandardOutput.ReadToEnd();
         Console.WriteLine(result);
