@@ -15,7 +15,7 @@ public class BackgroundWorkerService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        int batchSize = 100000;  // Размер пачки данных
+/*        int batchSize = 100000;  // Размер пачки данных
         int skipCount = 0;
         while (!stoppingToken.IsCancellationRequested)
         {
@@ -41,6 +41,6 @@ public class BackgroundWorkerService : BackgroundService
 
             // Задержка на 5 минут перед следующей итерацией
             await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
-        }
+        }*/
     }
 }

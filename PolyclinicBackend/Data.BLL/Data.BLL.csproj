@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Data.DAL\Data.DAL.csproj" />
-    <ProjectReference Include="..\VisitorsGenerated\VisitorsGenerated.csproj" />
   </ItemGroup>
 
 </Project>

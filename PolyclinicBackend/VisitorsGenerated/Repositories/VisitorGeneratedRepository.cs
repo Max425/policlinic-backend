@@ -1,4 +1,4 @@
-using Data.DAL.DBExceptions;
+﻿using Data.DAL.DBExceptions;
 using Data.DAL.Context;
 using Data.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +17,7 @@ public class VisitorGeneratedRepository
     public async Task AddVisitor(Visitor visitor)
     {
         var p = _db.VisitorGenerated.Where(q => q.PassportSeries == visitor.PassportSeries && q.PassportNumber == visitor.PassportNumber).FirstOrDefault();
-        if(p != null)
+        if (p != null)
             throw new ObjectAlreadyExistsException();
         await _db.VisitorGenerated.AddAsync(visitor);
         await _db.SaveChangesAsync();
@@ -43,7 +43,7 @@ public class VisitorGeneratedRepository
     public async Task Remove(Visitor visitor)
     {
         var p = _db.VisitorGenerated.Where(q => q.PassportSeries == visitor.PassportSeries && q.PassportNumber == visitor.PassportNumber).FirstOrDefault() ?? throw new ObjectNotFoundException();
-        _db.VisitorGenerated.Remove(p);     
+        _db.VisitorGenerated.Remove(p);
         await _db.SaveChangesAsync();
     }
 
