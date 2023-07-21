@@ -12,7 +12,7 @@ public class PythonService
         ProcessStartInfo start = new()
         {
             FileName = cmd,
-            Arguments = args,
+            Arguments = $"{Path.Combine(Path.GetDirectoryName(Directory.GetCurrentDirectory()), "PythonService", "code.py")} {args}",
             StandardOutputEncoding = Encoding.UTF8,
             UseShellExecute = false,
             RedirectStandardOutput = true

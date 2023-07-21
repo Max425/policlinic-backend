@@ -43,6 +43,6 @@ public class BackgroundWorkerService : BackgroundService
                 }
             }
             await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
-        }*/
+        }
     }
 }

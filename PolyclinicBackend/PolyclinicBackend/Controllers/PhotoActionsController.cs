@@ -1,6 +1,8 @@
 ﻿using Data.BLL.Facade;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Data.DAL.Entities;
+using PythonServiceWork;
 
 namespace PolyclinicBackend.Controllers
 {
@@ -17,20 +19,20 @@ namespace PolyclinicBackend.Controllers
         }
 
         [HttpPost("UploadPhoto")]
-        public async Task<IActionResult> UploadPhoto(IList<IFormFile> files)
+        public async Task<IActionResult> UploadPhoto(IFormFile file)
         {
             string uploads = Path.Combine(_hostingEnvironment.ContentRootPath, "Uploads");
             Directory.CreateDirectory(uploads);
-            foreach (IFormFile file in files)
+ 
+            if (file.Length > 0)
             {
-                if (file.Length > 0)
+                string filePath = Path.Combine(uploads, file.FileName);
+                using (Stream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
                 {
-                    string filePath = Path.Combine(uploads, file.FileName);
-                    using (Stream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                    {
-                        file.CopyTo(fileStream);
-                    }
+                    file.CopyTo(fileStream);
                 }
+                Visitor visitor = PythonService.GetDataFromPhoto("C:/Python311/python.exe", $"{filePath} false");
+                Console.WriteLine(visitor.Gender); // TODO: тут вызывать чекер
             }
 
             return Ok();
