@@ -1,4 +1,4 @@
-import sys
+﻿import sys
 sys.stdout.reconfigure(encoding='utf-8')
 import imutils
 from imutils.contours import sort_contours
