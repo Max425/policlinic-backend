@@ -9,7 +9,7 @@ pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tessera
 import sys
 import cv2
 import re
-
+import os
 import csv
 import difflib
 import threading
@@ -218,7 +218,7 @@ def read_ph(photo, imagePathForAns):
     else:
         error = "True"
     global pasdata
-    pasdata = {"LastName": surname, "FirstName": name, "FatherName": otch, "Gender": gend, "City": place, "DateIssue": data_vyd, "BirthDate": data, "PassportSeries": seria, "PassportNumber": nomer, "PhotoBase64": imagePathForAns, "Nationality": "RU"}    
+    pasdata = {"LastName": surname, "FirstName": name, "FatherName": otch, "Gender": gend, "City": place, "DateIssue": data_vyd, "BirthDate": data, "PassportSeries": seria, "PassportNumber": nomer, "PhotoBase64": os.path.basename(imagePathForAns), "Nationality": "RU"}    
     json_data = json.dumps(pasdata, ensure_ascii=False)
     print(json_data)
     answer = []
