@@ -2,6 +2,7 @@
 using Data.BLL.DTO;
 using Data.DAL.Entities;
 using Data.DAL.Repositories;
+using Data.DAL.Validator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,12 @@ namespace Data.BLL.Service
         public async Task<List<Visitor>> GetVisitors()
         {
             return await _visitorRepository.GetVisitors();
+        }
+
+        public async Task<ValidationEnumerator> CheckVisitorForExisting(VisitorDTO visitorDTO)
+        {
+            var entity = VisitorDTOToVisitor.Convert(visitorDTO);
+            return await _visitorRepository.CheckVisitorForExisting(entity);
         }
     }
 }

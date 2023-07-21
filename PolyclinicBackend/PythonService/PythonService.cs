@@ -1,13 +1,13 @@
 ﻿using System.Diagnostics;
 using System.Text;
 using Newtonsoft.Json;
-using Data.DAL.Entities;
+using Data.BLL.DTO;
 
 namespace PythonServiceWork;
 
 public class PythonService
 {
-    public static Visitor GetDataFromPhoto(string cmd, string args)
+    public static VisitorDTO GetDataFromPhoto(string cmd, string args)
     {
         ProcessStartInfo start = new()
         {
@@ -20,7 +20,7 @@ public class PythonService
         using Process process = Process.Start(start);
         string result = process.StandardOutput.ReadToEnd();
         Console.WriteLine(result);
-        Visitor visitor = JsonConvert.DeserializeObject<Visitor>(result);
+        VisitorDTO visitor = JsonConvert.DeserializeObject<VisitorDTO>(result);
         return visitor;
     }
 }

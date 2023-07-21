@@ -2,6 +2,7 @@ using Data.DAL.DBExceptions;
 using Data.DAL.Context;
 using Data.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
+using Data.DAL.Validator;
 
 namespace Data.DAL.Repositories;
 
@@ -50,5 +51,25 @@ public class VisitorRepository
     public async Task<List<Visitor>> GetVisitors()
     {
         return await _db.Visitors.ToListAsync();
+    }
+
+    public async Task<ValidationEnumerator> CheckVisitorForExisting(Visitor visitor)
+    {
+        var p = _db.Visitors.Where(q => q.PassportSeries == visitor.PassportSeries && q.PassportNumber == visitor.PassportNumber).FirstOrDefault();
+        if (p == null)
+        {
+            return ValidationEnumerator.NotExist;
+        }
+        else
+        {
+            if (p.FirstName == visitor.FirstName && p.LastName == visitor.LastName && p.FatherName == visitor.FatherName)
+            {
+                return ValidationEnumerator.Exist;
+            }
+            else
+            {
+                return ValidationEnumerator.Perhaps;
+            }
+        }
     }
 }

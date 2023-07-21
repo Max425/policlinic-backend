@@ -7,6 +7,8 @@ using Data.DAL.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System;
+using System.IO;
 using System.Reflection;
 
 namespace PolyclinicBackend.Controllers;
@@ -29,11 +31,33 @@ public class InteractionsWithDBController : Controller
         IActionResult res;
         try
         {
-            res = Ok(await _facade.VisitorService.GetVisitors());
+            var visitors = await _facade.VisitorService.GetVisitors();
+
+            res = Ok(visitors);
         }
         catch (DBException ex) { res = BadRequest(ex.Message); }
         return res;
     }
+
+    [HttpGet("GetPhoto/{fileName}")]
+    public IActionResult GetPhoto(string fileName)
+    {
+        try
+        {
+            string filePath = Path.Combine("Uploads", fileName);
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound();
+            }
+            byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+            return File(fileBytes, "image/jpeg");
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "Произошла ошибка при получении фотографии.");
+        }
+    }
+
 
     [HttpGet("GetRecord")]
     public async Task<IActionResult> GetRecord()

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Data.DAL.Entities;
 using PythonServiceWork;
+using Data.BLL.DTO;
 
 namespace PolyclinicBackend.Controllers
 {
@@ -31,8 +32,9 @@ namespace PolyclinicBackend.Controllers
                 {
                     file.CopyTo(fileStream);
                 }
-                Visitor visitor = PythonService.GetDataFromPhoto("C:/Python311/python.exe", $"{filePath} false");
-                Console.WriteLine(visitor.Gender); // TODO: тут вызывать чекер
+                VisitorDTO visitor = PythonService.GetDataFromPhoto("C:/Python311/python.exe", $"{filePath} false");
+                Console.WriteLine(visitor.Gender);
+                _facade.VisitorService.CheckVisitorForExisting(visitor); // TODO: тут вызывать чекер
             }
 
             return Ok();

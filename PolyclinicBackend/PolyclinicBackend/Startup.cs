@@ -21,6 +21,7 @@ using System.Text;
 using Microsoft.AspNetCore.Builder;
 using System;
 using Microsoft.AspNetCore.Authentication;
+using PolyclinicBackend.HubConfig;
 
 namespace PolyclinicBackend;
 
@@ -81,7 +82,7 @@ public class Startup
             });
         });
 
-        services.AddDbContext<PolyclinicContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DataConnection")));
+        services.AddDbContext<PolyclinicContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DataConnection1")));
 
         services.AddAuthentication(options =>
         {
@@ -130,15 +131,13 @@ public class Startup
         //var bs = new BackgroundWorkerService(services.BuildServiceProvider());
         services.AddCors(options =>
         {
-            options.AddPolicy("_myAllowSpecificOrigins",
-                              builder =>
-                              {
-                                  builder.WithOrigins("http://localhost:4200",
-                                                      "http://localhost:4200/login")
-                                         .AllowAnyHeader()
-                                         .AllowAnyMethod();
-                              });
+            options.AddPolicy("CorsPolicy", builder => builder
+                .WithOrigins("http://localhost:4200")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials());
         });
+        services.AddSignalR();
 
 
     }
@@ -152,15 +151,17 @@ public class Startup
             c.SwaggerEndpoint("/swagger/Admin/swagger.json", "Admin");
             c.SwaggerEndpoint("/swagger/Login/swagger.json", "Login");
         });
-        app.UseCors("_myAllowSpecificOrigins");
+        app.UseCors("CorsPolicy");
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.UseEndpoints(endpoints => {
+        app.UseEndpoints(endpoints => 
+        {
             endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+            endpoints.MapHub<ConflictHub>("/conflict");
         });
 
     }
