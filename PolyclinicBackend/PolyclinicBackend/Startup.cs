@@ -106,7 +106,7 @@ public class Startup
         });
 
         services.AddControllersWithViews();
-
+        services.AddSignalR();
         services.AddTransient<VisitorRepository>();
         services.AddTransient<RecordRepository>();
         services.AddTransient<SurveyRepository>();
@@ -137,7 +137,7 @@ public class Startup
                 .AllowAnyMethod()
                 .AllowCredentials());
         });
-        services.AddSignalR();
+        
 
 
     }
