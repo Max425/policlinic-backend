@@ -166,6 +166,22 @@ public class InteractionsWithDBController : Controller
 
         return res;
     }
+    
+    [HttpGet("GetOperatorById/{id}")]
+    public async Task<IActionResult> GetOperatorById(int id)
+    {
+        IActionResult res;
+        try
+        {
+            res = Ok(await _facade.OperatorService.GetOperatorById(id));
+        }
+        catch (DbException ex)
+        {
+            res = BadRequest(ex.Message);
+        }
+
+        return res;
+    }
 
     [HttpPost("CreateVisitor")]
     public async Task<IActionResult> CreateVisitor(string firstName, string lastName, string fatherName, string city,

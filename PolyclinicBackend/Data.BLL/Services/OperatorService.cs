@@ -36,4 +36,9 @@ public class OperatorService
     {
         return await _operatorRepository.GetOperators();
     }
+    
+    public async Task<Operator> GetOperatorById(int id)
+    {
+        return await _operatorRepository.GetOperatorById(id);
+    }
 }

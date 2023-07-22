@@ -46,4 +46,9 @@ public class OperatorRepository
     {
         return await _db.Operators.ToListAsync();
     }
+    
+    public async Task<Operator> GetOperatorById(int id)
+    {
+        return await _db.Operators.FirstOrDefaultAsync(p => p.Id == id) ?? throw new ObjectNotFoundException();
+    }
 }
