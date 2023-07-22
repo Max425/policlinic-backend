@@ -21,7 +21,7 @@ public class AccountController : Controller
     [HttpPost("/token")]
     public IActionResult Token(string username, string password)
     {
-        var identity = GetIdentity(username, password);
+        var (identity, id) = GetIdentity(username, password);
 
         var now = DateTime.UtcNow;
         var jwt = new JwtSecurityToken(AuthOptions.ISSUER, AuthOptions.AUDIENCE, notBefore: now,
@@ -30,12 +30,13 @@ public class AccountController : Controller
                 SecurityAlgorithms.HmacSha256));
         var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
-        var response = new { access_token = encodedJwt, username = identity.Name };
+        var response = new { access_token = encodedJwt, username = identity.Name, Id = id };
 
         return Json(response);
     }
 
-    private ClaimsIdentity GetIdentity(string username, string password)
+
+    private (ClaimsIdentity identity, int id) GetIdentity(string username, string password)
     {
         var person = _credentialService.GetCredential(new CredentialDTO { Login = username, Password = password });
         var claims = new List<Claim>
@@ -45,6 +46,7 @@ public class AccountController : Controller
         };
         var claimsIdentity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
             ClaimsIdentity.DefaultRoleClaimType);
-        return claimsIdentity;
+        return (claimsIdentity, person.OperatorId);
     }
+
 }
