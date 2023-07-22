@@ -69,7 +69,10 @@ public class Startup
         });
 
         services.AddDbContext<PolyclinicContext>(options =>
-            options.UseNpgsql(Configuration.GetConnectionString("DataConnection1")));
+            options.UseNpgsql(Configuration.GetConnectionString("DataConnection1")));        
+        
+        /*services.AddDbContext<GeneratedContext>(options =>
+            options.UseNpgsql(Configuration.GetConnectionString("DataConnection1")));*/
 
         services.AddAuthentication(options =>
             {
