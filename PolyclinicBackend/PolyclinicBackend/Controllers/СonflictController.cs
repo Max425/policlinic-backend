@@ -1,28 +1,26 @@
-﻿using Data.BLL.Facade;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using PolyclinicBackend.HubConfig;
 using PolyclinicBackend.DataStorage;
+using PolyclinicBackend.HubConfig;
 
-namespace PolyclinicBackend.Controllers
+namespace PolyclinicBackend.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class СonflictController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class СonflictController : ControllerBase
+    private readonly IHubContext<ConflictHub> _hub;
+
+    public СonflictController(IHubContext<ConflictHub> hub)
     {
-        private readonly IHubContext<ConflictHub> _hub;
+        _hub = hub;
+        DataManager.InitializeHubContext(hub);
+    }
 
-        public СonflictController(IHubContext<ConflictHub> hub)
-        {
-            _hub = hub;
-            DataManager.InitializeHubContext(hub);
-        }
-
-        [HttpGet]
-        public IActionResult Get()
-        {
-            _hub.Clients.All.SendAsync("transferdata", DataManager.GetAll());
-            return Ok();
-        }
+    [HttpGet]
+    public IActionResult Get()
+    {
+        _hub.Clients.All.SendAsync("transferdata", DataManager.GetAll());
+        return Ok();
     }
 }

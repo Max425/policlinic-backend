@@ -3,15 +3,15 @@ using Data.DAL.Entities;
 
 namespace Data.BLL.Converters.DTOsToEntities;
 
-public class DoctorDTOToDoctor
+public static class DoctorDTOToDoctor
 {
-    public static Doctor Convert(DoctorDTO recordDTO)
+    public static Doctor Convert(DoctorDTO recordDto)
     {
         var entity = new Doctor
         {
-            FullName = recordDTO.FullName,
-            CabinetNumber = recordDTO.CabinetNumber,
-            SurveyId = recordDTO.SurveyId,
+            FullName = recordDto.FullName,
+            CabinetNumber = recordDto.CabinetNumber,
+            SurveyId = recordDto.SurveyId,
         };
         return entity;
     }

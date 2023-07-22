@@ -8,7 +8,7 @@ namespace Data.DAL.Repositories;
 public class RecordRepository
 {
     private readonly PolyclinicContext _db;
-    
+
     public RecordRepository(PolyclinicContext polyclinicContext)
     {
         _db = polyclinicContext;
@@ -16,7 +16,7 @@ public class RecordRepository
 
     public async Task AddRecord(Record record)
     {
-        var p = _db.Records.Where(p => p.DateTime == record.DateTime && p.SurveyId == record.VisitorId).FirstOrDefault();
+        var p = _db.Records.FirstOrDefault(p => p.DateTime == record.DateTime && p.SurveyId == record.VisitorId);
         if (p != null)
             throw new ObjectAlreadyExistsException();
         await _db.Records.AddAsync(record);
@@ -25,7 +25,7 @@ public class RecordRepository
 
     public async Task EditRecord(Record record)
     {
-        var p = _db.Records.Where(p => p.Id == record.Id).FirstOrDefault() ?? throw new ObjectNotFoundException();
+        var p = _db.Records.FirstOrDefault(p => p.Id == record.Id) ?? throw new ObjectNotFoundException();
         p.VisitorId = record.VisitorId;
         p.SurveyId = record.SurveyId;
         p.DateTime = record.DateTime;
@@ -35,9 +35,10 @@ public class RecordRepository
 
     public async Task RemoveRecord(Record record)
     {
-        var p = _db.Records.Where(p => p.DateTime == record.DateTime && p.SurveyId == record.VisitorId).FirstOrDefault() ?? throw new ObjectNotFoundException();
-    _db.Remove(p);
-    await _db.SaveChangesAsync();
+        var p = _db.Records.FirstOrDefault(p => p.DateTime == record.DateTime && p.SurveyId == record.VisitorId) ??
+                throw new ObjectNotFoundException();
+        _db.Remove(p);
+        await _db.SaveChangesAsync();
     }
 
     public async Task<List<Record>> GetRecords()

@@ -1,19 +1,20 @@
 ﻿using Bogus;
 using Data.DAL.Context;
 using Data.DAL.Entities;
+using VisitorGenerated.Context;
 
 namespace Test;
 
-public class Program
+public static class Program
 {
     public static void Main()
     {
         using var dbContext = new GeneratedContext();
         // Удаление существующих записей из таблицы
         // dbContext.Database.ExecuteSqlRaw("TRUNCATE TABLE public.\"VisitorGenerated\" RESTART IDENTITY");
-        List<string> patronymics = File.ReadAllLines("..\\..\\..\\rus_midname.txt").ToList();
-        List<string> names = File.ReadAllLines("..\\..\\..\\russian_names.txt").ToList();
-        List<string> surnames = File.ReadAllLines("..\\..\\..\\russian_surnames.txt").ToList();
+        var patronymics = File.ReadAllLines("..\\..\\..\\rus_midname.txt").ToList();
+        var names = File.ReadAllLines("..\\..\\..\\russian_names.txt").ToList();
+        var surnames = File.ReadAllLines("..\\..\\..\\russian_surnames.txt").ToList();
 
         var faker = new Faker<Visitor>("ru")
             .RuleFor(p => p.FirstName, f => f.PickRandom(names))
@@ -29,13 +30,13 @@ public class Program
             .RuleFor(p => p.DateIssue, f => f.Date.Past(5).ToUniversalTime().Date);
 
         var visitors = new List<Visitor>();
-        int duplicateCount = 15;
+        const int duplicateCount = 15;
 
         foreach (var originalVisitor in faker.Generate(1000))
         {
             visitors.Add(originalVisitor);
 
-            for (int i = 0; i < duplicateCount; i++)
+            for (var i = 0; i < duplicateCount; i++)
             {
                 Visitor duplicateVisitor = new()
                 {
@@ -65,11 +66,11 @@ public class Program
     private static string GenerateRandomNameWithError(string orig, List<string> nameList)
     {
         Random random = new();
-        int randomIndex = random.Next(0, nameList.Count - 1);
+        var randomIndex = random.Next(0, nameList.Count - 1);
         string originalName;
         originalName = (randomIndex % 2 == 0) ? nameList[randomIndex] : orig;
 
-        char[] nameChars = originalName.ToCharArray();
+        var nameChars = originalName.ToCharArray();
         randomIndex = random.Next(0, originalName.Length);
         if (randomIndex % 2 == 0)
         {
@@ -82,7 +83,7 @@ public class Program
     private static int GenerateRandomPassportNumber(int originalNumber)
     {
         Random random = new();
-        int randomIndex = random.Next(0, 500);
+        var randomIndex = random.Next(0, 500);
         return (randomIndex % 2 == 0) ? originalNumber : originalNumber - originalNumber % 10;
     }
 }

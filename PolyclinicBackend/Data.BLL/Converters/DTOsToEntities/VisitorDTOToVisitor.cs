@@ -3,24 +3,24 @@ using Data.DAL.Entities;
 
 namespace Data.BLL.Converters.DTOsToEntities;
 
-public class VisitorDTOToVisitor
+public static class VisitorDTOToVisitor
 {
-    public static Visitor Convert(VisitorDTO visitorDTO)
+    public static Visitor Convert(VisitorDTO visitorDto)
     {
         var entity = new Visitor
         {
-            BirthDate = visitorDTO.BirthDate,
-            City = visitorDTO.City,
-            DateIssue = visitorDTO.DateIssue,
-            FatherName = visitorDTO.FatherName,
-            FirstName = visitorDTO.FirstName,
-            Gender = visitorDTO.Gender,
-            Id = visitorDTO.Id,
-            LastName = visitorDTO.LastName,
-            Nationality = visitorDTO.Nationality,
-            PhotoBase64 = visitorDTO.PhotoBase64,
-            PassportNumber = visitorDTO.PassportNumber,
-            PassportSeries = visitorDTO.PassportSeries
+            BirthDate = visitorDto.BirthDate,
+            City = visitorDto.City,
+            DateIssue = visitorDto.DateIssue,
+            FatherName = visitorDto.FatherName,
+            FirstName = visitorDto.FirstName,
+            Gender = visitorDto.Gender,
+            Id = visitorDto.Id,
+            LastName = visitorDto.LastName,
+            Nationality = visitorDto.Nationality,
+            PhotoBase64 = visitorDto.PhotoBase64,
+            PassportNumber = visitorDto.PassportNumber,
+            PassportSeries = visitorDto.PassportSeries
         };
         return entity;
     }

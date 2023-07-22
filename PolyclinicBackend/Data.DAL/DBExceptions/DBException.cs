@@ -1,16 +1,16 @@
 ﻿namespace Data.DAL.DBExceptions;
 
-public class DBException : Exception
+public class DbException : Exception
 {
-    public DBException()
+    protected DbException()
     {
     }
 
-    public DBException(string message) : base(message)
+    protected DbException(string message) : base(message)
     {
     }
 
-    public DBException(Exception ex, string message) : base(message, ex)
+    protected DbException(Exception ex, string message) : base(message, ex)
     {
     }
 }

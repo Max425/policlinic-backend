@@ -3,11 +3,11 @@ using Data.DAL.Entities;
 
 namespace Data.BLL.Converters.EntitiesToDTOs;
 
-public class VisitorToVisitorDTO
+public static class VisitorToVisitorDTO
 {
     public static VisitorDTO Convert(Visitor visitor)
     {
-        var DTO = new VisitorDTO
+        var dto = new VisitorDTO
         {
             DateIssue = visitor.DateIssue,
             BirthDate = visitor.BirthDate,
@@ -22,6 +22,6 @@ public class VisitorToVisitorDTO
             PassportNumber = visitor.PassportNumber,
             PassportSeries = visitor.PassportSeries,
         };
-        return DTO;
+        return dto;
     }
 }

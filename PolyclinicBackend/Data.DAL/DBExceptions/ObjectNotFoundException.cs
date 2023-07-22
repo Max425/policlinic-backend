@@ -1,6 +1,6 @@
 ﻿namespace Data.DAL.DBExceptions;
 
-public class ObjectNotFoundException : DBException
+public class ObjectNotFoundException : DbException
 {
     public ObjectNotFoundException()
     {

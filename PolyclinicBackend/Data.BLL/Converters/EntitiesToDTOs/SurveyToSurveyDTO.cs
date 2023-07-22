@@ -3,16 +3,16 @@ using Data.DAL.Entities;
 
 namespace Data.BLL.Converters.EntitiesToDTOs;
 
-public class SurveyToSurveyDTO
+public static class SurveyToSurveyDTO
 {
     public static SurveyDTO Convert(Survey survey)
     {
-        var DTO = new SurveyDTO
+        var dto = new SurveyDTO
         {
             Id = survey.Id,
             Price = survey.Price,
             Title = survey.Title,
         };
-        return DTO;
+        return dto;
     }
 }

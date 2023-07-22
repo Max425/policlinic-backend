@@ -1,6 +1,4 @@
-﻿using Data.DAL.Entities;
-
-namespace Data.BLL.DTO;
+﻿namespace Data.BLL.DTO;
 
 public class RecordDTO
 {

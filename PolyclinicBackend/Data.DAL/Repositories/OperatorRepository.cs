@@ -8,7 +8,7 @@ namespace Data.DAL.Repositories;
 public class OperatorRepository
 {
     private readonly PolyclinicContext _db;
-    
+
     public OperatorRepository(PolyclinicContext polyclinicContext)
     {
         _db = polyclinicContext;
@@ -16,7 +16,8 @@ public class OperatorRepository
 
     public async Task AddOperator(Operator oper)
     {
-        var p = _db.Operators.Where(p => p.FirstName == oper.FirstName && p.LastName == oper.LastName && p.FatherName == oper.FatherName).FirstOrDefault();
+        var p = _db.Operators
+            .FirstOrDefault(p => p.FirstName == oper.FirstName && p.LastName == oper.LastName && p.FatherName == oper.FatherName);
         if (p != null)
             throw new ObjectAlreadyExistsException();
         await _db.AddAsync(oper);
@@ -25,7 +26,7 @@ public class OperatorRepository
 
     public async Task EditOperator(Operator oper)
     {
-        var p = _db.Operators.Where(p => p.Id == oper.Id).FirstOrDefault() ?? throw new ObjectNotFoundException();
+        var p = _db.Operators.FirstOrDefault(p => p.Id == oper.Id) ?? throw new ObjectNotFoundException();
         p.FirstName = oper.FirstName;
         p.LastName = oper.LastName;
         p.FatherName = oper.FatherName;
@@ -35,7 +36,8 @@ public class OperatorRepository
 
     public async Task RemoveOperator(Operator oper)
     {
-        var p = _db.Operators.Where(p => p.FirstName == oper.FirstName && p.LastName == oper.LastName && p.FatherName == oper.FatherName).FirstOrDefault() ?? throw new ObjectNotFoundException();
+        var p = _db.Operators
+            .FirstOrDefault(p => p.FirstName == oper.FirstName && p.LastName == oper.LastName && p.FatherName == oper.FatherName) ?? throw new ObjectNotFoundException();
         _db.Remove(p);
         await _db.SaveChangesAsync();
     }

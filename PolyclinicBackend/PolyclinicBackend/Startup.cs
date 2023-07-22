@@ -1,26 +1,11 @@
-﻿using Data.DAL.Context;
-using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Data.BLL.Facade;
+using Data.BLL.Services;
+using Data.DAL.Context;
 using Data.DAL.Repositories;
-using Data.DAL.Entities;
-using Microsoft.AspNetCore.Identity;
-using Data.BLL.Service;
-using Data.BLL.DTO;
-using Data.DAL;
-using Data.BLL.Facade;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authorization;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.AspNetCore.Builder;
-using System;
-using Microsoft.AspNetCore.Authentication;
+using Microsoft.OpenApi.Models;
 using PolyclinicBackend.HubConfig;
 
 namespace PolyclinicBackend;
@@ -41,7 +26,8 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddControllers();
-        services.AddSwaggerGen(c => {
+        services.AddSwaggerGen(c =>
+        {
             c.SwaggerDoc("Polyclinic", new OpenApiInfo
             {
                 Title = "Polyclinic",
@@ -69,41 +55,42 @@ public class Startup
             c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 {
-                   new OpenApiSecurityScheme
-                   {
-                       Reference = new OpenApiReference
-                       {
-                           Type = ReferenceType.SecurityScheme,
-                           Id = "Bearer"
-                       }
-                   },
-                   new string[]{}
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[] { }
                 }
             });
         });
 
-        services.AddDbContext<PolyclinicContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DataConnection1")));
+        services.AddDbContext<PolyclinicContext>(options =>
+            options.UseNpgsql(Configuration.GetConnectionString("DataConnection1")));
 
         services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(options =>
-        {
-            options.RequireHttpsMetadata = false;
-            options.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuer = true,
-                ValidIssuer = AuthOptions.ISSUER,
-                ValidateAudience = true,
-                ValidAudience = AuthOptions.AUDIENCE,
-                ValidateLifetime = true,
-                IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-                ValidateIssuerSigningKey = true,
-            };
-        });
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = AuthOptions.ISSUER,
+                    ValidateAudience = true,
+                    ValidAudience = AuthOptions.AUDIENCE,
+                    ValidateLifetime = true,
+                    IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                    ValidateIssuerSigningKey = true
+                };
+            });
 
         services.AddControllersWithViews();
         services.AddSignalR();
@@ -137,16 +124,14 @@ public class Startup
                 .AllowAnyMethod()
                 .AllowCredentials());
         });
-        
-
-
     }
 
     public void Configure(IApplicationBuilder app)
     {
         app.UseDeveloperExceptionPage();
         app.UseSwagger();
-        app.UseSwaggerUI(c => {
+        app.UseSwaggerUI(c =>
+        {
             c.SwaggerEndpoint("/swagger/Polyclinic/swagger.json", "Polyclinic");
             c.SwaggerEndpoint("/swagger/Admin/swagger.json", "Admin");
             c.SwaggerEndpoint("/swagger/Login/swagger.json", "Login");
@@ -156,13 +141,12 @@ public class Startup
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.UseEndpoints(endpoints => 
+        app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                "default",
+                "{controller=Home}/{action=Index}/{id?}");
             endpoints.MapHub<ConflictHub>("/conflict");
         });
-
     }
 }

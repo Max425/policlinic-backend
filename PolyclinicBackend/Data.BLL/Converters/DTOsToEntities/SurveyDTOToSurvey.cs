@@ -3,15 +3,15 @@ using Data.DAL.Entities;
 
 namespace Data.BLL.Converters.DTOsToEntities;
 
-public class SurveyDTOToSurvey
+public static class SurveyDTOToSurvey
 {
-    public static Survey Convert(SurveyDTO surveyDTO)
+    public static Survey Convert(SurveyDTO surveyDto)
     {
         var entity = new Survey
         {
-            Id = surveyDTO.Id,
-            Price = surveyDTO.Price,
-            Title = surveyDTO.Title
+            Id = surveyDto.Id,
+            Price = surveyDto.Price,
+            Title = surveyDto.Title
         };
         return entity;
     }

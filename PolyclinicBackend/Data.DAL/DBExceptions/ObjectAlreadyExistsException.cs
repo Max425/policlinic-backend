@@ -1,6 +1,6 @@
 ﻿namespace Data.DAL.DBExceptions;
 
-public class ObjectAlreadyExistsException : DBException
+public class ObjectAlreadyExistsException : DbException
 {
     public ObjectAlreadyExistsException()
     {

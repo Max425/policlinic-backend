@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Data.DAL.Validator;
 
-namespace Data.DAL.Validator
+public enum ValidationEnumerator
 {
-    public enum ValidationEnumerator
-    {
-        Exist,
-        Perhaps,
-        NotExist
-    }
+    Exist,
+    Perhaps,
+    NotExist
 }

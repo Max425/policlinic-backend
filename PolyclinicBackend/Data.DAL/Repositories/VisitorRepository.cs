@@ -17,8 +17,9 @@ public class VisitorRepository
 
     public async Task AddVisitor(Visitor visitor)
     {
-        var p = _db.Visitors.Where(q => q.PassportSeries == visitor.PassportSeries && q.PassportNumber == visitor.PassportNumber).FirstOrDefault();
-        if(p != null)
+        var p = _db.Visitors.FirstOrDefault(q =>
+            q.PassportSeries == visitor.PassportSeries && q.PassportNumber == visitor.PassportNumber);
+        if (p != null)
             throw new ObjectAlreadyExistsException();
         await _db.Visitors.AddAsync(visitor);
         await _db.SaveChangesAsync();
@@ -26,7 +27,7 @@ public class VisitorRepository
 
     public async Task EditVisitor(Visitor visitor)
     {
-        var p = _db.Visitors.Where(q => q.Id == visitor.Id).FirstOrDefault() ?? throw new ObjectNotFoundException();
+        var p = _db.Visitors.FirstOrDefault(q => q.Id == visitor.Id) ?? throw new ObjectNotFoundException();
         p.FirstName = visitor.FirstName;
         p.LastName = visitor.LastName;
         p.FatherName = visitor.FatherName;
@@ -43,8 +44,10 @@ public class VisitorRepository
 
     public async Task Remove(Visitor visitor)
     {
-        var p = _db.Visitors.Where(q => q.PassportSeries == visitor.PassportSeries && q.PassportNumber == visitor.PassportNumber).FirstOrDefault() ?? throw new ObjectNotFoundException();
-        _db.Visitors.Remove(p);     
+        var p = _db.Visitors.FirstOrDefault(q =>
+                    q.PassportSeries == visitor.PassportSeries && q.PassportNumber == visitor.PassportNumber) ??
+                throw new ObjectNotFoundException();
+        _db.Visitors.Remove(p);
         await _db.SaveChangesAsync();
     }
 
@@ -53,23 +56,20 @@ public class VisitorRepository
         return await _db.Visitors.ToListAsync();
     }
 
-    public async Task<ValidationEnumerator> CheckVisitorForExisting(Visitor visitor)
+    public Task<ValidationEnumerator> CheckVisitorForExisting(Visitor visitor)
     {
-        var p = _db.Visitors.Where(q => q.PassportSeries == visitor.PassportSeries && q.PassportNumber == visitor.PassportNumber).FirstOrDefault();
+        var p = _db.Visitors.FirstOrDefault(q =>
+            q.PassportSeries == visitor.PassportSeries && q.PassportNumber == visitor.PassportNumber);
         if (p == null)
         {
-            return ValidationEnumerator.NotExist;
+            return Task.FromResult(ValidationEnumerator.NotExist);
         }
-        else
+
+        if (p.FirstName == visitor.FirstName && p.LastName == visitor.LastName)
         {
-            if (p.FirstName == visitor.FirstName && p.LastName == visitor.LastName)
-            {
-                return ValidationEnumerator.Exist;
-            }
-            else
-            {
-                return ValidationEnumerator.Perhaps;
-            }
+            return Task.FromResult(ValidationEnumerator.Exist);
         }
+
+        return Task.FromResult(ValidationEnumerator.Perhaps);
     }
 }

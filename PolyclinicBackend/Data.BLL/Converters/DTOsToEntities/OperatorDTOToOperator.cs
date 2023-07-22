@@ -1,25 +1,19 @@
 ﻿using Data.BLL.DTO;
 using Data.DAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Data.BLL.Converters.DTOsToEntities
+namespace Data.BLL.Converters.DTOsToEntities;
+
+public static class OperatorDTOToOperator
 {
-    public class OperatorDTOToOperator
+    public static Operator Convert(OperatorDTO operatorDto)
     {
-        public static Operator Convert(OperatorDTO operatorDTO)
+        var entity = new Operator
         {
-            var entity = new Operator
-            {
-                Id = operatorDTO.Id,
-                FirstName = operatorDTO.FirstName,
-                FatherName = operatorDTO.FatherName,
-                LastName = operatorDTO.LastName
-            };
-            return entity;
-        }
+            Id = operatorDto.Id,
+            FirstName = operatorDto.FirstName,
+            FatherName = operatorDto.FatherName,
+            LastName = operatorDto.LastName
+        };
+        return entity;
     }
 }

@@ -17,7 +17,7 @@ public class SurveyRepository
 
     public async Task AddSurvey(Survey survey)
     {
-        var p = _db.Surveys.Where(p => p.Title == survey.Title).FirstOrDefault();
+        var p = _db.Surveys.FirstOrDefault(p => p.Title == survey.Title);
         if (p != null)
             throw new ObjectAlreadyExistsException();
         await _db.Surveys.AddAsync(survey);
@@ -26,7 +26,7 @@ public class SurveyRepository
 
     public async Task EditSurvey(Survey survey)
     {
-        var p = _db.Surveys.Where(p => p.Id == survey.Id).FirstOrDefault() ?? throw new ObjectNotFoundException();
+        var p = _db.Surveys.FirstOrDefault(p => p.Id == survey.Id) ?? throw new ObjectNotFoundException();
         p.Title = survey.Title;
         p.Price = survey.Price;
         await _db.SaveChangesAsync();
@@ -34,7 +34,7 @@ public class SurveyRepository
 
     public async Task RemoveSurvey(Survey survey)
     {
-        var p = _db.Surveys.Where(p => p.Title == survey.Title).FirstOrDefault() ?? throw new ObjectNotFoundException();
+        var p = _db.Surveys.FirstOrDefault(p => p.Title == survey.Title) ?? throw new ObjectNotFoundException();
         _db.Remove(p);
         await _db.SaveChangesAsync();
     }
@@ -43,6 +43,7 @@ public class SurveyRepository
     {
         return await _db.Surveys.ToListAsync();
     }
+
     public async Task<Survey> GetSurveyById(int id)
     {
         return await _db.Surveys.FirstOrDefaultAsync(p => p.Id == id) ?? throw new ObjectNotFoundException();

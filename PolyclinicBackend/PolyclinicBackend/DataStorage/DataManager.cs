@@ -2,32 +2,31 @@
 using Microsoft.AspNetCore.SignalR;
 using PolyclinicBackend.HubConfig;
 
-namespace PolyclinicBackend.DataStorage
+namespace PolyclinicBackend.DataStorage;
+
+public static class DataManager
 {
-    public static class DataManager
+    private static readonly List<ConflictDTO>? Data = new();
+    private static IHubContext<ConflictHub>? _hubContext;
+
+    public static void InitializeHubContext(IHubContext<ConflictHub> hubContext)
     {
-        private static readonly List<ConflictDTO>? _data = new();
-        private static IHubContext<ConflictHub>? _hubContext;
+        _hubContext = hubContext;
+    }
 
-        public static void InitializeHubContext(IHubContext<ConflictHub> hubContext)
-        {
-            _hubContext = hubContext;
-        }
+    public static List<ConflictDTO>? GetAll()
+    {
+        return Data;
+    }
 
-        public static List<ConflictDTO> GetAll()
-        {
-            return _data;
-        }
+    public static void Add(ConflictDTO conflict)
+    {
+        Data?.Add(conflict);
+        _hubContext?.Clients.All.SendAsync("transferdata", GetAll());
+    }
 
-        public static void Add(ConflictDTO conflict)
-        {
-            _data.Add(conflict);
-            _hubContext?.Clients.All.SendAsync("transferdata", DataManager.GetAll());
-        }
-
-        public static void Delete(int id)
-        {
-            _data.RemoveAll(conflict => conflict.Id == id);
-        }        
+    public static void Delete(int id)
+    {
+        Data?.RemoveAll(conflict => conflict.Id == id);
     }
 }

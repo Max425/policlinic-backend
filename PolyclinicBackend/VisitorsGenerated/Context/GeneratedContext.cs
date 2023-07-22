@@ -1,8 +1,7 @@
 ﻿using Data.DAL.Entities;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.DAL.Context;
+namespace VisitorGenerated.Context;
 
 public class GeneratedContext : DbContext
 {

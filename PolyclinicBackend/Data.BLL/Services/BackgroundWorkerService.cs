@@ -1,6 +1,7 @@
 ﻿using Data.DAL.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using VisitorGenerated.Repositories;
 
 namespace Data.BLL.Services;
 
@@ -14,10 +15,10 @@ public class BackgroundWorkerService : BackgroundService
         _ = ExecuteAsync(new CancellationToken());
     }
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    protected sealed override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        int batchSize = 100;  // Размер пачки данных
-        int skipCount = 0;
+        const int batchSize = 100;
+        var skipCount = 0;
         while (!stoppingToken.IsCancellationRequested)
         {
             using (var scope = _serviceProvider.CreateScope())
@@ -27,14 +28,14 @@ public class BackgroundWorkerService : BackgroundService
 
                 try
                 {
-                    // Получить данные из сгенерированной БД
                     var visitors = await visitorGeneratedRepo.GetVisitorGenerated(batchSize, skipCount);
 
-                    // TODO: дергать какой-то метод для добавления
+                    // TODO: дергать метод для добавления
                     foreach (var visitor in visitors)
                     {
                         await visitorRepo.AddVisitor(visitor);
                     }
+
                     skipCount += batchSize;
                 }
                 catch (Exception ex)
@@ -42,6 +43,7 @@ public class BackgroundWorkerService : BackgroundService
                     Console.WriteLine(ex.ToString());
                 }
             }
+
             await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
         }
     }

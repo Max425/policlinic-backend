@@ -2,14 +2,13 @@
 using Microsoft.AspNetCore.SignalR;
 using PolyclinicBackend.DataStorage;
 
-namespace PolyclinicBackend.HubConfig
+namespace PolyclinicBackend.HubConfig;
+
+public class ConflictHub : Hub
 {
-    public class ConflictHub : Hub
+    public async Task Send(ConflictDTO data)
     {
-        public async Task Send(ConflictDTO data)
-        {
-            DataManager.Delete(data.Id);
-            await Clients.All.SendAsync("transferdata", DataManager.GetAll());
-        }
+        DataManager.Delete(data.Id);
+        await Clients.All.SendAsync("transferdata", DataManager.GetAll());
     }
 }
