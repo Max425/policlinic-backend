@@ -62,7 +62,7 @@ public class VisitorRepository
         }
         else
         {
-            if (p.FirstName == visitor.FirstName && p.LastName == visitor.LastName && p.FatherName == visitor.FatherName)
+            if (p.FirstName == visitor.FirstName && p.LastName == visitor.LastName)
             {
                 return ValidationEnumerator.Exist;
             }

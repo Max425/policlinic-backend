@@ -15,6 +15,7 @@ namespace PolyclinicBackend.Controllers
         public СonflictController(IHubContext<ConflictHub> hub)
         {
             _hub = hub;
+            DataManager.InitializeHubContext(hub);
         }
 
         [HttpGet]

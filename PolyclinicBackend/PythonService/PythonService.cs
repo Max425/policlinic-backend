@@ -19,7 +19,6 @@ public class PythonService
         };
         using Process process = Process.Start(start);
         string result = process.StandardOutput.ReadToEnd();
-        Console.WriteLine(result);
         VisitorDTO visitor = JsonConvert.DeserializeObject<VisitorDTO>(result);
         return visitor;
     }

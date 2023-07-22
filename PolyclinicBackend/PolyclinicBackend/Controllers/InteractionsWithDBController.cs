@@ -151,7 +151,9 @@ public class InteractionsWithDBController : Controller
         IActionResult res;
         try
         {
-            await _facade.VisitorService.AddVisitor(new VisitorDTO { FirstName = firstName, LastName = lastName, FatherName = fatherName, City = city, Gender = gender, BirthDate = birthDate, DateIssue = dateIssue, Nationality = nationality, PassportNumber = passportNumber, PassportSeries = passportSeries, PhotoBase64 = photoBase64 });
+            DateTime birthDateUtc = DateTime.SpecifyKind(birthDate, DateTimeKind.Utc);
+            DateTime dateIssueUtc = DateTime.SpecifyKind(dateIssue, DateTimeKind.Utc);
+            await _facade.VisitorService.AddVisitor(new VisitorDTO { FirstName = firstName, LastName = lastName, FatherName = fatherName, City = city, Gender = gender, BirthDate = birthDateUtc, DateIssue = dateIssueUtc, Nationality = nationality, PassportNumber = passportNumber, PassportSeries = passportSeries, PhotoBase64 = photoBase64 });
             res = Ok();
         }
         catch (DBException ex) { res = BadRequest(ex.Message); }
