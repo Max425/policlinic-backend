@@ -2,6 +2,7 @@
 using System.Text;
 using Data.BLL.DTO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace PythonService;
 
@@ -20,7 +21,12 @@ public static class PythonService
         };
         using var process = Process.Start(start);
         var result = process.StandardOutput.ReadToEnd();
-        var visitor = JsonConvert.DeserializeObject<VisitorDTO>(result);
+        var settings = new JsonSerializerSettings
+        {
+            DateFormatString = "dd.MM.yyyy",
+            Converters = { new IsoDateTimeConverter() }
+        };
+        var visitor = JsonConvert.DeserializeObject<VisitorDTO>(result, settings);
         return visitor;
     }
 }

@@ -163,16 +163,21 @@ def read_ph(photo, imagePathForAns):
     gen = [x.strip() for x in re.findall(r'[а-яА-ЯёЁ \-]+', genText)]
     flag = True  # переменная для остановки
     count = 0
-    while (flag):
-        if gen[count].find("ЖЕ") != -1:
-            gend = "ЖЕН"
-            flag = False
-            break
-        if gen[count].find("МУЖ") != -1:
-            gend = "МУЖ"
-            flag = False
-            break
-        count = count + 1
+    try:
+        flag = True
+        count = 0
+        while flag:
+            if gen[count].find("ЖЕ") != -1:
+                gend = "ЖЕН"
+                flag = False
+                break
+            if gen[count].find("МУЖ") != -1:
+                gend = "МУЖ"
+                flag = False
+                break
+            count = count + 1
+    except IndexError:
+        gend = "ЖЕН"
     mrz = bn[y:y + h, x:x + w]
     #cv2.imshow('res', mrz)
     #cv2.waitKey(5000)
